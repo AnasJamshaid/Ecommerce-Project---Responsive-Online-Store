@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  overflow-x: hidden;
+}
+/* Default styles for larger devices */
+.main-container {
+  @apply max-w-screen-xl w-full h-screen mx-auto;
+}
+
+/* Specific media query for laptop screens with width of 1366px */
+@media (max-width: 1366px) {
+  .main-container {
+    @apply w-full max-w-[1366px] h-screen; /* Set container width to 1366px */
+  }
+}
+
+/* Media query for larger desktop screens (greater than 1366px) */
+@media (min-width: 1367px) {
+  .main-container {
+    @apply w-full max-w-[1366px] h-screen; /* Ensuring the container doesn't exceed 1366px width */
+  }
+}
+
+/* Media query for tablets (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .main-container {
+    @apply w-full h-[90vh];
+  }
+}
+
+/* Media query for mobile devices (max-width: 768px) */
+@media (max-width: 768px) {
+  .main-container {
+    @apply w-full h-[80vh]; /* Adjust height for mobile devices */
+  }
+}
+/* Adjustments for 4K and Larger Screens (2560px and up) */
+@media (min-width: 2560px) {
+  .main-container {
+    @apply max-w-[1366px] h-screen; /* Restrict the width to Full HD for 4K screens */
+  }
+}
