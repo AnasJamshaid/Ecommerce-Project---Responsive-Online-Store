@@ -2,7 +2,7 @@
 
 import React from "react";
 import SecondHeader from "../components/SecondHeader";
-import { Breadcrumb } from "../components/Breadcrumb";
+import Breadcrumb from "../components/Breadcrumb";
 
 
 const AboutPage = () => {
@@ -12,7 +12,7 @@ const AboutPage = () => {
     <>
       <SecondHeader />
       <div
-        className="relative text-white h-72 bg-cover bg-center"
+        className="relative text-white h-72 bg-cover bg-center "
         style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your image URL
       >
         {/* Overlay for darker background */}
@@ -27,7 +27,7 @@ const AboutPage = () => {
           <h1 className="text-4xl font-bold text-center">{pageTitle}</h1>
 
           {/* Breadcrumb Component */}
-          <Breadcrumb />
+          <Breadcrumb  />
         </div>
       </div>
     </>

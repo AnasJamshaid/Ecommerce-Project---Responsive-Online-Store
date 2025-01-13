@@ -4,7 +4,7 @@ import SecondHeader from "../components/SecondHeader";
 import { PiCoffee } from "react-icons/pi";
 import Image from "next/image"; // Import Image component
 import { Clients } from "../components/Clients";
-import { Breadcrumb } from "../components/Breadcrumb";
+import  Breadcrumb  from "../components/Breadcrumb";
 import { Footer } from "../components/Footer";
 
 export default function MenuPage() {

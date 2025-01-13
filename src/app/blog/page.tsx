@@ -2,7 +2,7 @@
 
 import React from "react";
 import SecondHeader from "../components/SecondHeader";
-import { Breadcrumb } from "../components/Breadcrumb";
+import Breadcrumb  from "../components/Breadcrumb";
 
 
 const BlogPage = () => {
