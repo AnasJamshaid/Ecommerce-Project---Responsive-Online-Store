@@ -1,5 +1,6 @@
 'use client'
 
+
 import React, { useState } from "react";
 import NavigationLinks from "./Navigationslinks";
 import { HiMiniShoppingBag } from "react-icons/hi2";
@@ -23,11 +24,13 @@ export const Header = () => {
   };
 
   // Close menu when clicking outside
-  const closeMenu = (e) => {
-    if (e.target.id !== 'menu' && !e.target.closest('#menu')) {
+  const closeMenu = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement; // Cast the target to HTMLElement
+    if (target.id !== 'menu' && !target.closest('#menu')) {
       setMenuOpen(false);
     }
   };
+  
 
   return (
     <header className="top-0 left-0 w-full z-50 ">

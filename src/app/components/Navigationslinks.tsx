@@ -16,8 +16,8 @@ const NavigationLinks = () => {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => { // Specify the MouseEvent type
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
       }
     };
@@ -29,7 +29,7 @@ const NavigationLinks = () => {
   }, []);
 
   // Set active link on click
-  const handleLinkClick = (linkName) => {
+  const handleLinkClick = (linkName: string) => {
     setActiveLink(linkName);
   };
 

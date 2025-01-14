@@ -3,12 +3,11 @@ import React from "react";
 import { usePathname } from "next/navigation"; // Hook to get the current route
 import Link from "next/link"; // Import Link from next/link
 
-
 export const MobileHeader = () => {
   const pathname = usePathname(); // Get the current path
 
   // Function to determine if a link is active
-  const isActive = (path) => pathname === path;
+  const isActive = (path: string) => pathname === path; // Explicitly define 'path' as a string
 
   return (
     <header className="font-inter font-normal text-white py-6 px-6"> {/* Apply Inter font here with weight 400 */}
@@ -57,8 +56,6 @@ export const MobileHeader = () => {
         >
           Contact
         </Link>
-
-
       </nav>
     </header>
   );
