@@ -2,7 +2,7 @@
 import React from "react";
 import { usePathname } from "next/navigation"; // Hook to get the current route
 import Link from "next/link"; // Import Link from next/link
-import { LuSearch } from "react-icons/lu";
+
 
 export const MobileHeader = () => {
   const pathname = usePathname(); // Get the current path
