@@ -44,3 +44,70 @@ body {
     @apply max-w-[1366px] h-screen; /* Restrict the width to Full HD for 4K screens */
   }
 }
+.my-masonry-grid {
+  display: flex;
+  width: 100%;
+}
+.my-masonry-grid_column {
+  padding-left: 16px; /* Gap between columns */
+  background-clip: padding-box;
+}
+.my-masonry-grid img {
+  display: block;
+  width: 100%;
+  border-radius: 8px;
+}
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+.slider::-webkit-slider-thumb {
+  background-color: #FF9F0D !important;
+  border: 2px solid #FF7F00 !important; /* Optional: darker border for better contrast */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  background-color: #FF9F0D !important;
+  border: 2px solid #FF7F00 !important; /* Optional: darker border for better contrast */
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2); /* Shadow effect */
+  cursor: pointer;
+}
+.slider {
+  background: #FF9F0D;
+}
+
+/* Webkit Browsers (Chrome, Safari) */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FF9F0D;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3); /* Shadow effect */
+  cursor: pointer;
+}
+
+/* Firefox */
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FF9F0D;
+  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3); /* Shadow effect */
+  cursor: pointer;
+}
+
+
+/* For Firefox Progress Background */
+.slider::-moz-range-track {
+  background: #FF9F0D;
+  height: 2px;
+  border-radius: 10px;
+}
