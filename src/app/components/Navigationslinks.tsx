@@ -7,7 +7,7 @@ import { HiChevronDown } from "react-icons/hi";
 const NavigationLinks = () => {
   const [isAboutOpen, setIsAboutOpen] = useState(false); // State for dropdown
   const [activeLink, setActiveLink] = useState("home"); // Active link state
-  const dropdownRef = useRef(null); // Reference for dropdown menu
+  const dropdownRef = useRef<HTMLUListElement | null>(null); // Explicitly type the ref as HTMLUListElement
 
   // Toggle the "About" dropdown menu
   const toggleAboutDropdown = () => {
@@ -16,7 +16,7 @@ const NavigationLinks = () => {
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => { // Specify the MouseEvent type
+    const handleClickOutside = (event: MouseEvent) => { 
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsAboutOpen(false);
       }
