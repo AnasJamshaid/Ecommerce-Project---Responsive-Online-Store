@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
+import Link from "next/link";
 import {
   MdKeyboardDoubleArrowLeft,
   MdKeyboardDoubleArrowRight,
@@ -79,48 +80,57 @@ const ShopPage: React.FC = () => {
             <div className="md:col-span-3">
               <Sorts />
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-                {currentProducts.map((product) => (
-                  <div
-                    key={product.id}
-                    className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 group relative"
-                  >
-                    <div className="relative">
-                      <Image
-                        src={product.image}
-                        alt={product.title}
-                        width={500}  // Adjust width as necessary
-                        height={400} // Adjust height as necessary
-                        className="w-full h-60 object-cover rounded-lg group-hover:opacity-80 transition duration-300"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-                        <div className="flex space-x-4">
-                          <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                            <PiGitDiffBold size={24} />
-                          </button>
-                          <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                            <MdOutlineShoppingBag size={24} />
-                          </button>
-                          <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                            <CiHeart size={24} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+  {currentProducts.map((product) => (
+    <Link href={`/shop/${product.id}`} key={product.id}>
+      <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 group relative cursor-pointer">
+        <div className="relative">
+          <Image
+            src={product.image}
+            alt={product.title}
+            width={500}
+            height={400}
+            className="w-full h-60 object-cover rounded-lg group-hover:opacity-80 transition duration-300"
+          />
+          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+            <div className="flex space-x-4">
+              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
+                <PiGitDiffBold size={24} />
+              </button>
+              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
+                <MdOutlineShoppingBag size={24} />
+              </button>
+              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
+                <CiHeart size={24} />
+              </button>
+            </div>
+          </div>
+        </div>
 
-                    <h3 className="font-semibold text-lg text-gray-800 mt-4">
-                      {product.title}
-                    </h3>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <p className="text-[#FF9F0D] font-bold text-xl">
-                        ${product.salePrice}
-                      </p>
-                      <p className="text-gray-500 line-through">
-                        ${product.price}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <h3 className="font-semibold text-lg text-gray-800 mt-4">
+          {product.title}
+        </h3>
+        <div className="flex items-center space-x-2 mt-2">
+          {product.salePrice ? (
+            <>
+              <p className="text-[#FF9F0D] font-bold text-xl">
+                ${product.salePrice}
+              </p>
+              <p className="text-gray-500 line-through">
+                ${product.price}
+              </p>
+            </>
+          ) : (
+            <p className="text-[#FF9F0D] font-bold text-xl">
+              ${product.price}
+            </p>
+          )}
+        </div>
+      </div>
+    </Link>
+  ))}
+</div>
+
+
 
               {/* Pagination Controls */}
               <div className="flex justify-center mt-10">

@@ -3,304 +3,210 @@ import { NextResponse } from "next/server";
 export async function GET() {
   const products = [
     {
-      id: 1,
-      title: "Fresh Lime",
-      price: "$38.00",
-      salePrice: "$45.00",
-      image: "/product1.jpg",
+      "id": 1,
+      "title": "Fresh Lime",
+      "price": "38.00",
+      "image": "/product1.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 100,
+      "sku": "FL-001",
+      "description": "Fresh and juicy limes."
     },
     {
-      id: 2,
-      title: "Chocolate Muffin",
-      price: "$28.00",
-      image: "/product2.jpg",
+      "id": 2,
+      "title": "Chocolate Muffin",
+      "price": "28.00",
+      "image": "/product2.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 50,
+      "sku": "CM-002",
+      "description": "Delicious chocolate muffins for any occasion."
     },
     {
-      id: 3,
-      title: "Burger",
-      price: "$21.00",
-      salePrice: "$45.00",
-      image: "/product3.jpg",
-    },
-    { id: 4, title: "Country Burger", price: "$45.00", image: "/product4.jpg" },
-    {
-      id: 5,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product5.jpg",
-    },
-    { id: 6, title: "Pizza", price: "$43.00", image: "/product6.jpg" },
-    {
-      id: 7,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product7.jpg",
+      "id": 3,
+      "title": "Burger",
+      "price": "21.00",
+      "salePrice": "18.00",
+      "image": "/product3.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 75,
+      "sku": "BG-003",
+      "description": "A classic beef burger with all the toppings."
     },
     {
-      id: 8,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product8.jpg",
+      "id": 4,
+      "title": "Country Burger",
+      "price": "45.00",
+      "image": "/product4.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 120,
+      "sku": "CB-004",
+      "description": "A country-style burger with homemade ingredients."
     },
     {
-      id: 9,
-      title: "Chicken Chup",
-      price: "$12.00",
-      salePrice: "$115",
-      image: "/product9.jpg",
+      "id": 5,
+      "title": "Drink",
+      "price": "23.00",
+      "salePrice": "20.00",
+      "image": "/product5.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 200,
+      "sku": "DR-005",
+      "description": "Refreshing drink for hot summer days."
     },
     {
-      id: 10,
-      title: "Country Burger",
-      price: "$45.00",
-
-      image: "/product10.jpg",
+      "id": 6,
+      "title": "Pizza",
+      "price": "43.00",
+      "image": "/product6.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 150,
+      "sku": "PZ-006",
+      "description": "Pizza with fresh ingredients and cheese."
     },
     {
-      id: 11,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product11.jpg",
+      "id": 7,
+      "title": "Cheese Butter",
+      "price": "10.00",
+      "image": "/product7.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 80,
+      "sku": "CB-007",
+      "description": "Smooth and creamy cheese butter."
     },
     {
-      id: 12,
-      title: "Pizza",
-      price: "$43.00",
-
-      image: "/product12.jpg",
+      "id": 8,
+      "title": "Sandwiches",
+      "price": "25.00",
+      "image": "/product8.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 60,
+      "sku": "SD-008",
+      "description": "Fresh sandwiches with various fillings."
     },
     {
-      id: 13,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product13.jpg",
+      "id": 9,
+      "title": "Chicken Chup",
+      "price": "12.00",
+      "salePrice": "10.00",
+      "image": "/product9.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 40,
+      "sku": "CC-009",
+      "description": "Spicy chicken chup for a flavorful meal."
     },
     {
-      id: 14,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product14.jpg",
+      "id": 10,
+      "title": "Country Burger",
+      "price": "45.00",
+      "image": "/product10.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 120,
+      "sku": "CB-010",
+      "description": "A country-style burger with a unique twist."
     },
     {
-      id: 15,
-      title: "Chicken Chup",
-      price: "$12.00",
-
-      image: "/product15.jpg",
+      "id": 11,
+      "title": "Drink",
+      "price": "23.00",
+      "salePrice": "20.00",
+      "image": "/product11.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 200,
+      "sku": "DR-011",
+      "description": "A refreshing drink for any time of the day."
     },
     {
-      id: 16,
-      title: "Country Burger",
-      price: "$45.00",
-
-      image: "/product1.jpg",
+      "id": 12,
+      "title": "Pizza",
+      "price": "43.00",
+      "image": "/product12.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 150,
+      "sku": "PZ-012",
+      "description": "A delicious pizza with multiple toppings."
     },
     {
-      id: 17,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product2.jpg",
+      "id": 13,
+      "title": "Cheese Butter",
+      "price": "10.00",
+      "image": "/product13.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 80,
+      "sku": "CB-013",
+      "description": "Buttery cheese with a smooth texture."
     },
     {
-      id: 18,
-      title: "Pizza",
-      price: "$43.00",
-
-      image: "/product3.jpg",
+      "id": 14,
+      "title": "Sandwiches",
+      "price": "25.00",
+      "image": "/product14.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 60,
+      "sku": "SD-014",
+      "description": "Variety of sandwiches with fresh fillings."
     },
     {
-      id: 19,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product4.jpg",
+      "id": 15,
+      "title": "Chicken Chup",
+      "price": "12.00",
+      "image": "/product15.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 40,
+      "sku": "CC-015",
+      "description": "Chicken chup with a flavorful touch."
     },
     {
-      id: 20,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product5.jpg",
+      "id": 16,
+      "title": "Country Burger",
+      "price": "45.00",
+      "image": "/product1.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 120,
+      "sku": "CB-016",
+      "description": "Classic country burger with fresh ingredients."
     },
     {
-      id: 21,
-      title: "Chicken Chup",
-      price: "$12.00",
-
-      image: "/product6.jpg",
+      "id": 17,
+      "title": "Drink",
+      "price": "23.00",
+      "salePrice": "20.00",
+      "image": "/product2.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 200,
+      "sku": "DR-017",
+      "description": "Cold drink to quench your thirst."
     },
     {
-      id: 22,
-      title: "Country Burger",
-      price: "$45.00",
-
-      image: "/product7.jpg",
+      "id": 18,
+      "title": "Pizza",
+      "price": "43.00",
+      "image": "/product3.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 150,
+      "sku": "PZ-018",
+      "description": "Delicious pizza with the finest toppings."
     },
     {
-      id: 23,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product8.jpg",
+      "id": 19,
+      "title": "Cheese Butter",
+      "price": "10.00",
+      "image": "/product4.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 80,
+      "sku": "CB-019",
+      "description": "Rich and creamy cheese butter for any meal."
     },
     {
-      id: 24,
-      title: "Pizza",
-      price: "$43.00",
-
-      image: "/product9.jpg",
-    },
-    {
-      id: 25,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product10.jpg",
-    },
-    {
-      id: 26,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product11.jpg",
-    },
-    {
-      id: 27,
-      title: "Chicken Chup",
-      price: "$12.00",
-
-      image: "/product12.jpg",
-    },
-    {
-      id: 28,
-      title: "Country Burger",
-      price: "$45.00",
-
-      image: "/product13.jpg",
-    },
-    {
-      id: 29,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product14.jpg",
-    },
-    {
-      id: 30,
-      title: "Pizza",
-      price: "$43.00",
-      image: "/product15.jpg",
-    },
-
-    {
-      id: 31,
-      title: "Fresh Lime",
-      price: "$38.00",
-      salePrice: "$45.00",
-      image: "/product1.jpg",
-    },
-    {
-      id: 32,
-      title: "Chocolate Muffin",
-      price: "$28.00",
-      image: "/product2.jpg",
-    },
-    {
-      id: 33,
-      title: "Burger",
-      price: "$21.00",
-      salePrice: "$45.00",
-      image: "/product3.jpg",
-    },
-    {
-      id: 34,
-      title: "Country Burger",
-      price: "$45.00",
-      image: "/product4.jpg",
-    },
-    {
-      id: 35,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product5.jpg",
-    },
-    { id: 36, title: "Pizza", price: "$43.00", image: "/product6.jpg" },
-    {
-      id: 37,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product7.jpg",
-    },
-    {
-      id: 38,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product8.jpg",
-    },
-    {
-      id: 39,
-      title: "Chicken Chup",
-      price: "$12.00",
-      salePrice: "$115",
-      image: "/product9.jpg",
-    },
-    {
-      id: 40,
-      title: "Country Burger",
-      price: "$45.00",
-
-      image: "/product10.jpg",
-
-    },
-    {
-      id: 41,
-      title: "Drink",
-      price: "$23.00",
-      salePrice: "$45.00",
-      image: "/product11.jpg",
-    },
-    {
-      id: 42,
-      title: "Pizza",
-      price: "$43.00",
-
-      image: "/product12.jpg",
-    },
-    {
-      id: 43,
-      title: "Cheese Butter",
-      price: "$10.00",
-
-      image: "/product13.jpg",
-    },
-    {
-      id: 44,
-      title: "Sandwiches",
-      price: "$25.00",
-
-      image: "/product14.jpg",
-    },
-    {
-      id: 45,
-      title: "Chicken Chup",
-      price: "$12.00",
-
-      image: "/product15.jpg",
+      "id": 20,
+      "title": "Sandwiches",
+      "price": "25.00",
+      "image": "/product5.jpg",
+      "gallery": ["/shop1.jpg", "/shop2.jpg", "/shop3.jpg"],
+      "stock": 60,
+      "sku": "SD-020",
+      "description": "Fresh and healthy sandwiches."
     }
   ];
   return NextResponse.json(products);
-
-  
 }
-
-
