@@ -12,6 +12,8 @@ import { Resturantactive } from "./components/Resturantactive";
 import { Blog } from "./components/Blog";
 import { Footer } from "./components/Footer";
 
+
+
 export default function Home() {
   return (
     <main className="main-container">
@@ -47,7 +49,13 @@ export default function Home() {
       <Testimonial />
       <Resturantactive />
       <Blog />
+
+
+
+
 <Footer />
+
+
     </main>
   );
 }
