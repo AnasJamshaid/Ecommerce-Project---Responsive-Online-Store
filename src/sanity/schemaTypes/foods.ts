@@ -1,4 +1,4 @@
-const foodSchema = {
+export default {
   name: 'food',
   type: 'document',
   title: 'Food',
@@ -58,5 +58,3 @@ const foodSchema = {
     },
   ],
 };
-
-export default foodSchema;
