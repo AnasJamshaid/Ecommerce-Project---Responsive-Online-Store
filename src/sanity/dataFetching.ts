@@ -1,5 +1,4 @@
 import { client } from "@/sanity/lib/client";
-import { urlFor } from "@/sanity/lib/image";
 
 export const getFoodData = async () => {
   try {

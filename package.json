@@ -6,7 +6,6 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "import-data": "node src/scripts/import-data.mjs",
     "lint": "next lint"
   },
   "dependencies": {

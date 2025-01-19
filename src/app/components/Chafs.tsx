@@ -5,8 +5,20 @@ import Image from 'next/image';
 import { getChefsData } from '@/sanity/chefsDataFetching'; // Import the data fetching function
 import { urlFor } from '@/sanity/lib/image'; // Assuming you're using urlFor like in ShopPage
 
+// Define Chef type
+interface Chef {
+  _id: string;
+  name: string;
+  position: string;
+  image: {
+    asset: {
+      url: string;
+    };
+  };
+}
+
 export const Chafs = () => {
-  const [chefs, setChefs] = useState<any[]>([]);
+  const [chefs, setChefs] = useState<Chef[]>([]); // Use the Chef type here
   const [visibleCount, setVisibleCount] = useState(4); // State to manage the number of visible chefs
 
   useEffect(() => {
