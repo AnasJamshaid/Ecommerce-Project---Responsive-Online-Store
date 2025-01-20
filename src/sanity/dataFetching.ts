@@ -10,3 +10,5 @@ export const getFoodData = async () => {
     return [];
   }
 };
+const data = await getFoodData();
+console.log('Fetched data:', data);
