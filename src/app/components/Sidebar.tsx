@@ -1,6 +1,6 @@
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaSearch } from "react-icons/fa";
-import { HiSearch } from "react-icons/hi";
+
 
 const Sidebar = () => {
   const recentPosts = [

@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FaCalendarAlt, FaComments, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaComments} from "react-icons/fa";
 import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
 import Sidebar from "../components/Sidebar";
