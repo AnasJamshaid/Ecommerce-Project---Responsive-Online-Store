@@ -5,6 +5,9 @@ import { FaCalendarAlt, FaComments, FaUser } from "react-icons/fa";
 import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
 import Sidebar from "../components/Sidebar";
+import { Footer } from "../components/Footer";
+import { MdArrowOutward } from "react-icons/md";
+import { PiUserCirclePlus } from "react-icons/pi";
 
 const BlogPage = () => {
   const pageTitle = "Blog"; // Static title for the Blog page
@@ -49,6 +52,7 @@ const BlogPage = () => {
 
   return (
     <>
+    <div className="main-container">
       {/* Header */}
       <SecondHeader />
 
@@ -88,17 +92,19 @@ const BlogPage = () => {
               {/* Content */}
               <div className="p-4 flex flex-col space-y-4">
                 {/* Metadata */}
-                <div className="flex items-center text-gray-500 text-sm space-x-4">
+                <div className="flex items-center text-black text-sm space-x-4">
                   <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
                     <FaCalendarAlt size={14} className="mr-1" />
                     {post.date}
                   </span>
+                  <span className="text-black">/</span>
                   <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
                     <FaComments size={14} className="mr-1" />
                     {post.comments} Comments
                   </span>
+                  <span className="text-black">/</span>
                   <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                    <FaUser size={14} className="mr-1" />
+                    <PiUserCirclePlus size={14} className="mr-1" />
                     {post.author}
                   </span>
                 </div>
@@ -107,7 +113,9 @@ const BlogPage = () => {
                 <h2 className="text-2xl font-bold border-b-2 border-gray-300 pb-2 "style={{ fontFamily: "Helvetica, Arial, sans-serif" }}>{post.title}</h2>
 
                 {/* Description */}
-                <p className="text-gray-600 text-sm line-clamp-3 font-inter"style={{ fontFamily: "Inter, Arial, sans-serif" }}>{post.description}</p>
+                <p className="text-gray-600 text-sm line-clamp-3 font-inter" style={{ fontFamily: "Inter, Arial, sans-serif" }}>
+                  {post.description}
+                </p>
 
                 {/* Read More */}
                 <Link
@@ -116,20 +124,7 @@ const BlogPage = () => {
                 >
                   Read More
                   <span className="ml-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 7l5 5-5 5M6 13h12"
-                      />
-                    </svg>
+                    <MdArrowOutward />
                   </span>
                 </Link>
               </div>
@@ -153,6 +148,9 @@ const BlogPage = () => {
         <div className="flex">
           <Sidebar />
         </div>
+        
+      </div>
+      <Footer/>
       </div>
     </>
   );
