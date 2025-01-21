@@ -40,7 +40,6 @@ const ProductDetail: React.FC = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [showDescription, setShowDescription] = useState(true);
   const [showReviews, setShowReviews] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
   const params = useParams();
   const id = params.id as string;
   const [product, setProduct] = useState<FoodItem | null>(null);

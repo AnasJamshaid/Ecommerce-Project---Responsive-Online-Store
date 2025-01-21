@@ -1,6 +1,6 @@
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaSearch } from "react-icons/fa";
-
+import Image from 'next/image';
 
 const Sidebar = () => {
   const recentPosts = [
@@ -30,24 +30,26 @@ const Sidebar = () => {
   return (
     <div className="sidebar w-[424px] p-6 space-y-6 max-md:hidden">
       {/* Search Box */}
-   <div className="mb-6">
-           <div className="flex items-center border rounded-md shadow-sm bg-[#FFF7ED]">
-             <input
-               type="text"
-               placeholder="Search Product"
-               className="w-full px-3 py-2 bg-transparent text-black focus:outline-none"
-             />
-             <button className="px-4 bg-[#FF9F0D] text-white rounded-r-md flex items-center justify-center">
-               <FaSearch className="h-12 w-5" />
-             </button>
-           </div>
-         </div>
+      <div className="mb-6">
+        <div className="flex items-center border rounded-md shadow-sm bg-[#FFF7ED]">
+          <input
+            type="text"
+            placeholder="Search Product"
+            className="w-full px-3 py-2 bg-transparent text-black focus:outline-none"
+          />
+          <button className="px-4 bg-[#FF9F0D] text-white rounded-r-md flex items-center justify-center">
+            <FaSearch className="h-12 w-5" />
+          </button>
+        </div>
+      </div>
       {/* Profile Section */}
       <div className="text-center border border-gray-300 rounded-lg p-4 shadow-md">
-        <img
+        <Image
           src="/profile1.jpg"
           alt="Profile"
-          className="w-20 h-20 mx-auto rounded-full border-4 border-[#FF9F0D]"
+          width={80}
+          height={80}
+          className="mx-auto rounded-full border-4 border-[#FF9F0D]"
         />
         <h3 className="mt-2 font-semibold text-xl text-[#FF9F0D]">Prince Miyako</h3>
         <p className="text-sm text-gray-500">Blogger & Photographer</p>
@@ -79,10 +81,12 @@ const Sidebar = () => {
         <div className="space-y-4">
           {recentPosts.map((post, index) => (
             <div key={index} className="flex items-center space-x-4">
-              <img
+              <Image
                 src={post.image}
                 alt="Post"
-                className="w-16 h-16 rounded-lg shadow-md object-cover"
+                width={64}
+                height={64}
+                className="rounded-lg shadow-md object-cover"
               />
               <div>
                 <p className="text-sm text-gray-500">{post.date}</p>
@@ -99,10 +103,12 @@ const Sidebar = () => {
         <div className="space-y-4">
           {filterByMenu.map((item) => (
             <div key={item.name} className="flex items-center space-x-4">
-              <img
+              <Image
                 src={item.image}
                 alt={item.name}
-                className="w-24 h-14 rounded-lg shadow-md object-cover"
+                width={96}
+                height={56}
+                className="rounded-lg shadow-md object-cover"
               />
               <div className="flex justify-between w-full">
                 <span className="text-sm text-gray-700">{item.name}</span>
@@ -113,28 +119,18 @@ const Sidebar = () => {
         </div>
       </div>
 
-      {/* Popular Tags */}
-      <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Popular Tags</h3>
-        <div className="flex flex-wrap gap-2">
-          {["Sandwich", "Tikka", "Bbq", "Restaurant", "Chicken Shawarma", "Health", "Fastfood", "Food", "Pizza", "Burger", "Chicken"].map((tag) => (
-            <span key={tag} className="px-3 py-1 bg-gray-100 text-sm rounded-full hover:bg-gray-200 cursor-pointer">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Photo Gallery */}
       <div className="border border-gray-300 rounded-lg p-4 shadow-md">
         <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Photo Gallery</h3>
         <div className="grid grid-cols-3 gap-2">
           {photoGallery.map((image, index) => (
-            <img
+            <Image
               key={index}
               src={image}
               alt="Gallery"
-              className="w-20 h-20 rounded-lg object-cover shadow-md"
+              width={80}
+              height={80}
+              className="rounded-lg object-cover shadow-md"
             />
           ))}
         </div>

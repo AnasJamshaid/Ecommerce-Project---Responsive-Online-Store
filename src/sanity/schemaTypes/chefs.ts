@@ -1,4 +1,4 @@
-export default {
+const chef = {
   name: 'chef',
   type: 'document',
   title: 'Chef',
@@ -48,3 +48,5 @@ export default {
     },
   ],
 };
+
+export default chef;

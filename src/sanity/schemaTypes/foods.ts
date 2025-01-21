@@ -1,4 +1,4 @@
-export default {
+const food = {
   name: 'food',
   type: 'document',
   title: 'Food',
@@ -35,7 +35,7 @@ export default {
       options: {
         layout: 'tags',
       },
-      validation: (Rule: any) => Rule.unique(),
+      validation: (Rule: { unique: () => any }) => Rule.unique(),
     },
     {
       name: 'image',
@@ -91,3 +91,5 @@ export default {
     },
   ],
 };
+
+export default food;
