@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { getFoodDataById } from '@/sanity/dataFetching';
+import Breadcrumb from '@/app/components/Breadcrumb';
+import SecondHeader from '@/app/components/SecondHeader';
 
 type FoodItem = {
   _id: string;
@@ -52,8 +54,33 @@ const ProductDetail: React.FC = () => {
     return <div className="text-center text-lg">Product not found.</div>;
   }
 
+ const pageTitle = "Productsdetalis"; // Static title for the Contact page
+
   return (
+    <>
+     <SecondHeader />
+      <div
+        className="relative text-white h-72 bg-cover bg-center"
+        style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your image URL
+      >
+        {/* Overlay for darker background */}
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+        {/* Content */}
+        <div
+          className="relative flex flex-col items-center justify-center h-full space-y-4"
+          style={{ fontFamily: "Helvetica, Arial, sans-serif" }} // Use Helvetica font for header
+        >
+          {/* Page Title */}
+          <h1 className="text-4xl font-bold text-center">{pageTitle}</h1>
+
+          {/* Breadcrumb Component */}
+          <Breadcrumb />
+        </div>
+      </div>
+
     <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
+   
       {/* Left Section: Product Images */}
       <div className="flex-1 max-w-lg">
         <div className="relative w-full h-80">
@@ -155,6 +182,7 @@ const ProductDetail: React.FC = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
