@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { getFoodDataById } from '@/sanity/dataFetching';
-import Breadcrumb from '@/app/components/Breadcrumb';
 import SecondHeader from '@/app/components/SecondHeader';
+import Breadcrumb from '@/app/components/Breadcrumb';
 
 type FoodItem = {
   _id: string;
@@ -53,12 +53,11 @@ const ProductDetail: React.FC = () => {
   if (!product) {
     return <div className="text-center text-lg">Product not found.</div>;
   }
-
- const pageTitle = "Productsdetalis"; // Static title for the Contact page
+  const pageTitle = "Contact"; // Static title for the Contact page
 
   return (
     <>
-     <SecondHeader />
+  <SecondHeader />
       <div
         className="relative text-white h-72 bg-cover bg-center"
         style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your image URL
@@ -80,7 +79,6 @@ const ProductDetail: React.FC = () => {
       </div>
 
     <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-8">
-   
       {/* Left Section: Product Images */}
       <div className="flex-1 max-w-lg">
         <div className="relative w-full h-80">
@@ -159,10 +157,12 @@ const ProductDetail: React.FC = () => {
         </div>
 
         {/* Tags and Categories */}
-        <div className="mt-4 text-sm text-gray-500">
-          <span>Category: {product.categories.join(', ')}</span>
-          <span className="ml-4">Tags: {product.tags.join(', ')}</span>
-        </div>
+     {/* Categories */}
+<div className="mt-4 text-sm text-gray-500">
+  <span>Category: {product.categories && product.categories.length > 0 ? product.categories.join(', ') : 'No categories available'}</span>
+  <span className="ml-4">Tags: {product.tags && product.tags.length > 0 ? product.tags.join(', ') : 'No tags available'}</span>
+</div>
+
 
         {/* Availability */}
         <div className="mt-2 text-lg font-semibold text-green-600">

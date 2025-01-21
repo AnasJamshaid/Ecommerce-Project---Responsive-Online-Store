@@ -45,7 +45,7 @@ const ProductCard: React.FC = () => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
       {foods.map((food) => (
-        <Link href={`/product/${food._id}`} key={food._id}>
+        <Link href={`/shop/${food._id}`} key={food._id}>
           <div className="bg-white p-6 rounded-lg shadow">
             <Image
               src={food.image}
