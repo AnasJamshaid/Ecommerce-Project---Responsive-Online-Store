@@ -9,11 +9,11 @@ export default {
       title: 'Food Name',
     },
     {
-      name: 'category',
-      type: 'string',
-      title: 'Category',
-      description:
-        'Category of the food item (e.g., Burger, Sandwich, Drink, etc.)',
+      name: 'categories',
+      type: 'array',
+      title: 'Categories',
+      description: 'Categories of the food item (e.g., Burger, Sandwich, Drink, etc.)',
+      of: [{ type: 'string' }],
     },
     {
       name: 'price',
@@ -27,14 +27,15 @@ export default {
       description: 'Price before discount (if any)',
     },
     {
-      name: 'tags',
+      name: 'badges',
       type: 'array',
-      title: 'Tags',
+      title: 'Badges',
+      description: 'Badges to highlight (e.g., Sale, New, Popular)',
       of: [{ type: 'string' }],
       options: {
         layout: 'tags',
       },
-      description: 'Tags for categorization (e.g., Best Seller, Popular, New)',
+      validation: (Rule: any) => Rule.unique(),
     },
     {
       name: 'image',
@@ -45,16 +46,48 @@ export default {
       },
     },
     {
+      name: 'gallery',
+      type: 'array',
+      title: 'Image Gallery',
+      description: 'Additional images of the food item (e.g., different angles, close-ups)',
+      of: [{ type: 'image' }],
+      options: {
+        hotspot: true,
+      },
+    },
+    {
+      name: 'tags',
+      type: 'array',
+      title: 'Tags',
+      description: 'Tags for categorizing or highlighting food items (e.g., Bestseller, Spicy, Vegan)',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags',
+      },
+    },
+    {
+      name: 'shortDescription',
+      type: 'text',
+      title: 'Short Description',
+      description: 'A brief description of the food item (e.g., great for lunch)',
+    },
+    {
       name: 'description',
       type: 'text',
       title: 'Description',
-      description: 'Short description of the food item',
+      description: 'Detailed description of the food item',
+    },
+    {
+      name: 'sku',
+      type: 'string',
+      title: 'SKU Number',
+      description: 'Stock Keeping Unit number for inventory management',
     },
     {
       name: 'available',
       type: 'boolean',
       title: 'Available',
-      description: 'Availability status of the food item',
+      description: 'Indicates if the food item is in stock or not',
     },
   ],
 };
