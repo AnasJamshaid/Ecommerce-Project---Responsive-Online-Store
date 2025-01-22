@@ -134,82 +134,85 @@ const ProductDetail: React.FC = () => {
       </div>
 
       <div className="mt-4 container mx-auto px-24">
-        {/* Button Group */}
-        <div className="flex space-x-4">
-          {/* Description Button */}
-          <button
-            onClick={() => {
-              setShowDescription(true);
-              setShowReviews(false); // Hide reviews when description is shown
-            }}
-            className={`px-4 py-2 w-36 text-white ${showDescription ? "bg-[#FF9F0D]" : "bg-gray-300"}`}
-          >
-            Description
-          </button>
+  {/* Button Group */}
+  <div className="flex space-x-4">
+    {/* Description Button */}
+    <button
+      onClick={() => {
+        setShowDescription(true);
+        setShowReviews(false); // Hide reviews when description is shown
+      }}
+      className={`px-4 py-2 w-36 text-white ${showDescription ? "bg-[#FF9F0D]" : "bg-gray-300"}`}
+    >
+      Description
+    </button>
 
-          {/* Reviews Button */}
-          <button
-            onClick={() => {
-              setShowReviews(true);
-              setShowDescription(false); // Hide description when reviews are shown
-            }}
-            className={`px-4 py-2 w-36 text-white ${showReviews ? "bg-[#FF9F0D]" : "bg-gray-300"}`}
-          >
-            Reviews
-          </button>
+    {/* Reviews Button */}
+    <button
+      onClick={() => {
+        setShowReviews(true);
+        setShowDescription(false); // Hide description when reviews are shown
+      }}
+      className={`px-4 py-2 w-36 text-white ${showReviews ? "bg-[#FF9F0D]" : "bg-gray-300"}`}
+    >
+      Reviews
+    </button>
+  </div>
+  <br />
+  <div className="mt-2 border-b border-gray-300"></div>
+  
+  {/* Description Content */}
+  {showDescription && (
+    <div className="mt-4 flex flex-col">
+      <div
+        className="text-sm text-gray-600 mt-2 leading-relaxed"
+        style={{ fontFamily: "Inter, Arial, sans-serif" }}
+        dangerouslySetInnerHTML={{
+          __html: product?.description || "No description available."
+        }}
+      />
+    </div>
+  )}
+
+  {/* Reviews Content */}
+  {showReviews && (
+    <div className="mt-4">
+      <div className="flex items-center space-x-2 mt-2">
+        {/* Rating Stars */}
+        <div className="flex items-center space-x-1">
+          {[...Array(5)].map((_, index) => {
+            const isFilled = index < Math.floor(product?.rating ?? 0); // Full star
+            const isHalf =
+              index === Math.floor(product?.rating ?? 0) &&
+              (product?.rating ?? 0) % 1 !== 0; // Half star
+            return (
+              <svg
+                key={index}
+                xmlns="http://www.w3.org/2000/svg"
+                fill={isFilled || isHalf ? "#FF9F0D" : "#FF9F0D"}
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                className="star-icon"
+              >
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+              </svg>
+            );
+          })}
         </div>
-        <br />
-        <div className="mt-2 border-b border-gray-300"></div>
-        {/* Description Content */}
-        {showDescription && (
-          <div className="mt-4 flex flex-col">
-            <p
-              className="text-base text-gray-600 mt-2"
-              style={{ fontFamily: "Inter, Arial, sans-serif" }}
-            >
-              {product?.description || "No description available."}
-            </p>
-          </div>
-        )}
-
-        {/* Reviews Content */}
-        {showReviews && (
-          <div className="mt-4">
-            <div className="flex items-center space-x-2 mt-2">
-              {/* Rating Stars */}
-              <div className="flex items-center space-x-1">
-                {[...Array(5)].map((_, index) => {
-                  const isFilled = index < Math.floor(product?.rating ?? 0); // Full star
-                  const isHalf =
-                    index === Math.floor(product?.rating ?? 0) &&
-                    (product?.rating ?? 0) % 1 !== 0; // Half star
-                  return (
-                    <svg
-                      key={index}
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill={isFilled || isHalf ? "#FF9F0D" : "#FF9F0D"}
-                      viewBox="0 0 24 24"
-                      width="20"
-                      height="20"
-                      className="star-icon"
-                    >
-                      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                    </svg>
-                  );
-                })}
-              </div>
-              <span className="text-lg text-gray-500">|</span>
-              <span className="text-sm text-gray-500">{product?.rating || "5.0"} Rating</span>
-              <span className="text-lg text-gray-500">|</span>
-              <span className="text-sm text-gray-600">{product?.reviewCount || "22"} Reviews</span>
-            </div>
-          </div>
-        )}
- <br />
-
- <div className="mt-2 border-b border-gray-300"></div>
-       
+        <span className="text-lg text-gray-500">|</span>
+        <span className="text-sm text-gray-500">{product?.rating || "5.0"} Rating</span>
+        <span className="text-lg text-gray-500">|</span>
+        <span className="text-sm text-gray-600">{product?.reviewCount || "22"} Reviews</span>
       </div>
+    </div>
+  )}
+  <br />
+
+  <div className="mt-2 border-b border-gray-300"></div>
+</div>
+
+
       <div className="container mx-auto px-24 mt-12">
       <SimilarProducts currentProductId={id as string} onProductClick={() => { }} />
       </div>
