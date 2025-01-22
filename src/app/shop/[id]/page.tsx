@@ -108,11 +108,10 @@ const ProductDetail: React.FC = () => {
                       product?.gallery?.map((imgUrl, index) => (
                         <div
                           key={index}
-                          className={`w-16 h-16 rounded-lg overflow-hidden border cursor-pointer transition-all duration-300 hover:border-blue-500 ${
-                            selectedImage === imgUrl
+                          className={`w-16 h-16 rounded-lg overflow-hidden border cursor-pointer transition-all duration-300 hover:border-blue-500 ${selectedImage === imgUrl
                               ? "border-blue-500"
                               : "border-gray-300"
-                          }`}
+                            }`}
                           onClick={() => handleThumbnailClick(imgUrl)}
                         >
                           <Image
@@ -257,9 +256,8 @@ const ProductDetail: React.FC = () => {
 
                       {/* Quantity Box */}
                       <div
-                        className={`w-16 h-10 flex items-center justify-center border-y border-black text-lg font-semibold ${
-                          isFocused ? "border-[#FF9F0D]" : "border-black"
-                        }`}
+                        className={`w-16 h-10 flex items-center justify-center border-y border-black text-lg font-semibold ${isFocused ? "border-[#FF9F0D]" : "border-black"
+                          }`}
                         onClick={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                         tabIndex={0} // To make it focusable
@@ -424,9 +422,8 @@ const ProductDetail: React.FC = () => {
                 setShowDescription(true);
                 setShowReviews(false); // Hide reviews when description is shown
               }}
-              className={`px-4 py-2 w-36 text-white ${
-                showDescription ? "bg-[#FF9F0D]" : "bg-gray-300"
-              }`}
+              className={`px-4 py-2 w-36 text-white ${showDescription ? "bg-[#FF9F0D]" : "bg-gray-300"
+                }`}
             >
               Description
             </button>
@@ -437,9 +434,8 @@ const ProductDetail: React.FC = () => {
                 setShowReviews(true);
                 setShowDescription(false); // Hide description when reviews are shown
               }}
-              className={`px-4 py-2 w-36  text-white ${
-                showReviews ? "bg-[#FF9F0D]" : "bg-gray-300"
-              }`}
+              className={`px-4 py-2 w-36  text-white ${showReviews ? "bg-[#FF9F0D]" : "bg-gray-300"
+                }`}
             >
               Reviews
             </button>
@@ -496,7 +492,7 @@ const ProductDetail: React.FC = () => {
           )}
         </div>{" "}
         <br />
-       
+
         <Footer />
       </div>
     </>
