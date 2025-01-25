@@ -38,14 +38,14 @@ export default function Home() {
       <Chafs />
       {/* Positioned Image */}
       <div className="hidden lg:block container mx-auto relative">
-          <Image
-            src="/leaf2.png"
-            alt="Sample"
-            width={600}
-            height={600}
-            className="absolute left-[39px] mt-[30px] transform -translate-x-1/2 -translate-y-1/2 rotate-45 opacity-30 "
-          />
-        </div>
+        <Image
+          src="/leaf2.png"
+          alt="Sample"
+          width={600}
+          height={600}
+          className="absolute left-[39px] mt-[30px] transform -translate-x-1/2 -translate-y-1/2 rotate-45 opacity-30 "
+        />
+      </div>
       <Testimonial />
       <Resturantactive />
       <Blog />
@@ -53,7 +53,7 @@ export default function Home() {
 
 
 
-<Footer />
+      <Footer />
 
 
     </main>
