@@ -43,7 +43,6 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
     const updatedCart = { ...cart };
     if (updatedCart[productId]) {
       updatedCart[productId].quantity += 1;
-      // Ensure updateCart is a function before calling
       if (typeof updateCart === "function") {
         updateCart(updatedCart);
       } else {
@@ -61,9 +60,8 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
       if (updatedCart[productId].quantity > 1) {
         updatedCart[productId].quantity -= 1;
       } else {
-        delete updatedCart[productId]; // Remove product from cart if quantity is 0
+        delete updatedCart[productId];
       }
-      // Ensure updateCart is a function before calling
       if (typeof updateCart === "function") {
         updateCart(updatedCart);
       } else {
@@ -75,12 +73,11 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
     }
   };
 
-  // Reset action progress after a brief timeout
   useEffect(() => {
     if (isActionInProgress) {
       const timeout = setTimeout(() => {
         setIsActionInProgress(false);
-      }, 500); // Adjust this timeout to suit your needs
+      }, 500);
       return () => clearTimeout(timeout);
     }
   }, [isActionInProgress]);
@@ -116,7 +113,7 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
                 className="flex items-center mb-4 border-b border-gray-200 pb-4"
               >
                 <img
-                  src={product.image}
+                  src={product.image || "default-image.png"}
                   alt={product.name}
                   className="w-20 h-20 object-cover rounded-md"
                 />
