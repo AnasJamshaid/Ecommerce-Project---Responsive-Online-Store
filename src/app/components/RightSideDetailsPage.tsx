@@ -4,33 +4,21 @@ import { PiGitDiffBold } from "react-icons/pi";
 import { useParams } from "next/navigation";
 import { getFoodDataById } from "@/sanity/dataFetching";
 import { FaFacebook, FaInstagram, FaRegHeart, FaTwitter, FaYoutube } from "react-icons/fa";
+import CartSlideIn from "./CartSlideIn"; // Import the CartSlideIn component
 
+// Define the FoodItem type
 type FoodItem = {
-    _id: string;
-    name: string;
-    description: string;
-    price: string;
-    originalPrice?: string;
-    image: string;
-    gallery: string[] | null;
-    tags: string[] | null;
-    categories: string[] | null;
-    badges: string[] | null;
-    shortDescription: string;
-    sku: string;
-    available: boolean;
-    rating: number;
-    reviewCount: number;
 };
 
 export const RightSideDetailsPage: React.FC = () => {
-    const [showDescription, setShowDescription] = useState(true);
-    const [showReviews, setShowReviews] = useState(false);
     const params = useParams();
     const id = params.id as string;
     const [product, setProduct] = useState<FoodItem | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+    const [cart, setCart] = useState<{ [key: string]: { product: FoodItem; quantity: number } }>({});
+    const [isCartVisible, setIsCartVisible] = useState(false);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -48,12 +36,43 @@ export const RightSideDetailsPage: React.FC = () => {
         if (id) fetchProduct();
     }, [id]);
 
-    const handleThumbnailClick = (imageUrl: string) => {
-        setSelectedImage(imageUrl);
-    };
+    // Get cart from localStorage on page load
+    useEffect(() => {
+        const savedCart = localStorage.getItem("cart");
+        if (savedCart) {
+            setCart(JSON.parse(savedCart));
+        }
+    }, []);
 
     const [quantity, setQuantity] = useState(0);
-    const [isFocused, setIsFocused] = useState(false);
+
+    const handleAddToCart = () => {
+        if (quantity > 0 && product) {
+            setCart((prevCart) => {
+                const updatedCart = {
+                    ...prevCart,
+                    [product._id]: {
+                        product,
+                        quantity: prevCart[product._id] ? prevCart[product._id].quantity + quantity : quantity,
+                    },
+                };
+
+                // Save updated cart to localStorage
+                localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+                return updatedCart;
+            });
+            alert(`Added ${quantity} ${product.name}(s) to cart!`);
+            setIsCartVisible(true); // Show cart slice/modal when added
+        } else {
+            alert("Please select a valid quantity!");
+        }
+    };
+
+    const handleCheckout = () => {
+        // Handle checkout logic here, like navigating to a checkout page or showing a checkout form
+        alert("Proceeding to checkout...");
+    };
 
     return (
         <div className="flex-1">
@@ -74,7 +93,7 @@ export const RightSideDetailsPage: React.FC = () => {
             <p className="mt-2 text-base text-gray-600" style={{ fontFamily: "Inter, sans-serif" }} aria-describedby="short-description">
                 {product?.shortDescription || "No short description available."}
             </p>
-            
+
             <div className="mt-2 border-b border-gray-300"></div>
 
             {/* Pricing */}
@@ -90,19 +109,17 @@ export const RightSideDetailsPage: React.FC = () => {
                 </span>
             </div>
 
-            {/* Reviews */}
+            {/* Reviews Section */}
             <div className="mt-4">
                 <div className="flex items-center space-x-2 mt-2">
-                    {/* Rating Stars */}
                     <div className="flex items-center space-x-1">
                         {[...Array(5)].map((_, index) => {
                             const isFilled = index < Math.floor(product?.rating ?? 0);
-                            const isHalf = index === Math.floor(product?.rating ?? 0) && (product?.rating ?? 0) % 1 !== 0;
                             return (
                                 <svg
                                     key={index}
                                     xmlns="http://www.w3.org/2000/svg"
-                                    fill={isFilled ? "#FF9F0D" : isHalf ? "#FF9F0D" : "#FF9F0D"}
+                                    fill={isFilled ? "#FF9F0D" : "#FF9F0D"}
                                     viewBox="0 0 24 24"
                                     width="20"
                                     height="20"
@@ -130,25 +147,15 @@ export const RightSideDetailsPage: React.FC = () => {
                 <div className="flex items-center gap-4 mt-2">
                     {/* Quantity Selector */}
                     <div className="flex items-center gap-0">
-                        {/* Minus Button */}
                         <button
                             onClick={() => setQuantity((prev) => Math.max(prev - 1, 0))}
                             className="w-10 h-10 flex items-center justify-center border border-black text-black font-bold hover:border-[#FF9F0D] hover:text-[#FF9F0D] focus:outline-none focus:border-[#FF9F0D]"
                         >
                             -
                         </button>
-
-                        {/* Quantity Box */}
-                        <div
-                            className={`w-16 h-10 flex items-center justify-center border-y border-black text-lg font-semibold ${isFocused ? "border-[#FF9F0D]" : "border-black"}`}
-                            onClick={() => setIsFocused(true)}
-                            onBlur={() => setIsFocused(false)}
-                            tabIndex={0}
-                        >
+                        <div className="w-16 h-10 flex items-center justify-center border-y border-black text-lg font-semibold">
                             {quantity}
                         </div>
-
-                        {/* Plus Button */}
                         <button
                             onClick={() => setQuantity((prev) => prev + 1)}
                             className="w-10 h-10 flex items-center justify-center border border-black text-black font-bold hover:border-[#FF9F0D] hover:text-[#FF9F0D] focus:outline-none focus:border-[#FF9F0D]"
@@ -156,72 +163,76 @@ export const RightSideDetailsPage: React.FC = () => {
                             +
                         </button>
                     </div>
-
                     {/* Add to Cart Button */}
                     <button
-                        onClick={() => alert(`Added ${quantity} items to cart!`)}
+                        onClick={handleAddToCart}
                         className="flex items-center gap-2 px-4 py-2 bg-[#FF9F0D] text-white font-bold rounded shadow hover:bg-[#e88d0c] focus:outline-none"
                     >
                         <MdOutlineShoppingBag size={18} />
                         Add to Cart
                     </button>
+
+                    {/* Display Cart Slide-In */}
+                    {isCartVisible && (
+                        <CartSlideIn cart={cart} setIsCartVisible={setIsCartVisible} onCheckout={handleCheckout} />
+                    )}
+                </div>
+            </div>
+
+            <div className="mt-2 border-b border-gray-300"></div>
+
+            <div className="mt-6 space-y-4 text-gray-800">
+                {/* Wishlist and Compare */}
+                <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+                        <FaRegHeart size={20} />
+                        <span className="font-medium">Add to Wishlist</span>
+                    </button>
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+                        <PiGitDiffBold size={20} />
+                        <span className="font-medium">Compare</span>
+                    </button>
+                </div>
+                {/* Categories */}
+                <div className="flex items-start gap-2">
+                    <span className="font-semibold">Categories:</span>
+                    <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
                 </div>
 
-                <div className="mt-2 border-b border-gray-300"></div>
+                {/* Tags */}
+                <div className="flex items-start gap-2">
+                    <span className="font-semibold">Tags:</span>
+                    <span className="text-gray-600">{product?.tags?.join(" | ") || "N/A"}</span>
+                </div>
 
-                <div className="mt-6 space-y-4 text-gray-800">
-                    {/* Wishlist and Compare */}
-                    <div className="flex items-center gap-4">
-                        <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-                            <FaRegHeart size={20} />
-                            <span className="font-medium">Add to Wishlist</span>
-                        </button>
-                        <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-                            <PiGitDiffBold size={20} />
-                            <span className="font-medium">Compare</span>
-                        </button>
-                    </div>
+                {/* SKU */}
+                <div className="flex items-start gap-2">
+                    <span className="font-semibold">SKU:</span>
+                    <span className="text-gray-600">{product?.sku || "N/A"}</span>
+                </div>
 
-                    {/* Categories */}
-                    <div className="flex items-start gap-2">
-                        <span className="font-semibold">Categories:</span>
-                        <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
-                    </div>
-
-                    {/* Tags */}
-                    <div className="flex items-start gap-2">
-                        <span className="font-semibold">Tags:</span>
-                        <span className="text-gray-600">{product?.tags?.join(" | ") || "N/A"}</span>
-                    </div>
-
-                    {/* SKU */}
-                    <div className="flex items-start gap-2">
-                        <span className="font-semibold">SKU:</span>
-                        <span className="text-gray-600">{product?.sku || "N/A"}</span>
-                    </div>
-
-                    {/* Share Icons */}
-                    <div>
-                        <div className="flex items-center gap-3">
-                            <span className="font-semibold">Share:</span>
-                            <div className="flex items-center gap-2">
-                                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                    <FaFacebook size={18} />
-                                </a>
-                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                    <FaTwitter size={18} />
-                                </a>
-                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                    <FaInstagram size={18} />
-                                </a>
-                                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                    <FaYoutube size={18} />
-                                </a>
-                            </div>
+                {/* Share Icons */}
+                <div>
+                    <div className="flex items-center gap-3">
+                        <span className="font-semibold">Share:</span>
+                        <div className="flex items-center gap-2">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
+                                <FaFacebook size={18} />
+                            </a>
+                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
+                                <FaTwitter size={18} />
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
+                                <FaInstagram size={18} />
+                            </a>
+                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
+                                <FaYoutube size={18} />
+                            </a>
                         </div>
                     </div>
-                    <div className="mt-2 border-b border-gray-300"></div>
                 </div>
+                <div className="mt-2 border-b border-gray-300"></div>
+
             </div>
         </div>
     );
