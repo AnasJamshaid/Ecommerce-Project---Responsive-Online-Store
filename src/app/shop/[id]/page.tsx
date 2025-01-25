@@ -7,7 +7,7 @@ import { getFoodDataById } from "@/sanity/dataFetching";
 import SecondHeader from "@/app/components/SecondHeader";
 import Breadcrumb from "@/app/components/Breadcrumb";
 import { Footer } from "@/app/components/Footer";
-import { RightSideDetailsPage } from "@/app/components/RightSideDetailsPage";
+import RightSideDetailsPage from '@/app/components/RightSideDetailsPage';
 import SimilarProducts from "@/app/components/SimilarProducts";
 
 type FoodItem = {
