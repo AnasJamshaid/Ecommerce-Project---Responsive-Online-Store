@@ -20,7 +20,7 @@
     "axios": "^1.7.9",
     "axois": "^0.0.1-security",
     "dotenv": "^16.4.7",
-    "next": "^15.1.5",
+    "next": "^15.1.6",
     "next-sanity": "^9.8.38",
     "nodemailer": "^6.10.0",
     "react": "^19.0.0",

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 interface FoodItem {
   name: string;
   price: string;
-  image: string;
+  image: string | null;  // Changed to string | null to allow nullable image
 }
 
 interface CartSlideInProps {
@@ -43,6 +43,7 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
     const updatedCart = { ...cart };
     if (updatedCart[productId]) {
       updatedCart[productId].quantity += 1;
+      // Ensure updateCart is a function before calling
       if (typeof updateCart === "function") {
         updateCart(updatedCart);
       } else {
@@ -60,8 +61,9 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
       if (updatedCart[productId].quantity > 1) {
         updatedCart[productId].quantity -= 1;
       } else {
-        delete updatedCart[productId];
+        delete updatedCart[productId]; // Remove product from cart if quantity is 0
       }
+      // Ensure updateCart is a function before calling
       if (typeof updateCart === "function") {
         updateCart(updatedCart);
       } else {
@@ -73,11 +75,12 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
     }
   };
 
+  // Reset action progress after a brief timeout
   useEffect(() => {
     if (isActionInProgress) {
       const timeout = setTimeout(() => {
         setIsActionInProgress(false);
-      }, 500);
+      }, 500); // Adjust this timeout to suit your needs
       return () => clearTimeout(timeout);
     }
   }, [isActionInProgress]);
@@ -112,11 +115,17 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
                 key={id}
                 className="flex items-center mb-4 border-b border-gray-200 pb-4"
               >
-                <img
-                  src={product.image || "default-image.png"}
-                  alt={product.name}
-                  className="w-20 h-20 object-cover rounded-md"
-                />
+                {product.image ? (
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-20 h-20 object-cover rounded-md"
+                  />
+                ) : (
+                  <div className="w-20 h-20 bg-gray-200 flex items-center justify-center rounded-md">
+                    <span className="text-gray-600">No Image</span>
+                  </div>
+                )}
                 <div className="ml-4 flex-1">
                   <p className="font-medium text-gray-800">{product.name}</p>
                   <p className="text-sm text-gray-600">

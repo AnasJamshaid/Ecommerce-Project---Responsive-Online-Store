@@ -6,6 +6,7 @@ import { getFoodDataById } from "@/sanity/dataFetching";
 import { FaFacebook, FaInstagram, FaRegHeart, FaTwitter, FaYoutube } from "react-icons/fa";
 import CartSlideIn from "./CartSlideIn"; // Import the CartSlideIn component
 
+
 type FoodItem = {
     _id: string;
     name: string;
