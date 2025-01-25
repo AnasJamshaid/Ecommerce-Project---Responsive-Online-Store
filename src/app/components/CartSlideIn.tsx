@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FoodItem } from "../../models/FoodItem"; // Adjust the import path as necessary
+
+interface FoodItem {
+  name: string;
+  price: string;
+  image: string;
+}
 
 interface CartSlideInProps {
   cart: { [key: string]: { product: FoodItem; quantity: number } };
@@ -27,7 +32,7 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
       // Auto-close after 5 seconds if no action is in progress
       const timeout = setTimeout(() => {
         setIsCartVisible(false);
-      }, 5000);
+      }, 1000);
 
       // Clean up timeout on unmount or when actions are in progress
       return () => clearTimeout(timeout);

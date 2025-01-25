@@ -8,6 +8,18 @@ import CartSlideIn from "./CartSlideIn"; // Import the CartSlideIn component
 
 // Define the FoodItem type
 type FoodItem = {
+    _id: string;
+    name: string;
+    image?: string;
+    available?: boolean;
+    originalPrice?: string;
+    price: string;
+    rating?: number;
+    reviewCount?: number;
+    categories?: string[];
+    tags?: string[];
+    sku?: string;
+    shortDescription?: string;
 };
 
 export const RightSideDetailsPage: React.FC = () => {
@@ -174,7 +186,7 @@ export const RightSideDetailsPage: React.FC = () => {
 
                     {/* Display Cart Slide-In */}
                     {isCartVisible && (
-                        <CartSlideIn cart={cart} setIsCartVisible={setIsCartVisible} onCheckout={handleCheckout} />
+                        <CartSlideIn cart={cart} setIsCartVisible={setIsCartVisible} onCheckout={handleCheckout} updateCart={setCart} />
                     )}
                 </div>
             </div>
