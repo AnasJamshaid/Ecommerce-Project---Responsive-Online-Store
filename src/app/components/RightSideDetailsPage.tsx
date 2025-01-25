@@ -194,34 +194,40 @@ const RightSideDetailsPage: React.FC = () => {
             <div className="mt-2 border-b border-gray-300"></div>
 
             <div className="mt-6 space-y-4 text-gray-800">
-                {/* Wishlist and Compare */}
-                <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <FaRegHeart />
-                        Add to Wishlist
-                    </button>
-                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <PiGitDiffBold />
-                        Add to Compare
-                    </button>
-                </div>
+        {/* Wishlist and Compare */}
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+            <FaRegHeart size={20} />
+            <span className="font-medium">Add to Wishlist</span>
+          </button>
+          <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+            <PiGitDiffBold size={20} />
+            <span className="font-medium">Compare</span>
+          </button>
+        </div>
 
-                {/* Social Media Links */}
-                <div className="flex items-center space-x-4">
-                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <FaFacebook size={24} />
-                    </a>
-                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <FaInstagram size={24} />
-                    </a>
-                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <FaTwitter size={24} />
-                    </a>
-                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
-                        <FaYoutube size={24} />
-                    </a>
-                </div>
-            </div>
+        {/* Categories */}
+        <div className="flex items-start gap-2">
+          <span className="font-semibold">Categories:</span>
+          <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
+        </div>
+
+        {/* Tags */}
+        <div className="flex items-start gap-2">
+          <span className="font-semibold">Tags:</span>
+          <span className="text-gray-600">{product?.tags?.join(", ") || "N/A"}</span>
+        </div>
+
+        {/* Social Media */}
+        <div className="flex items-center gap-6">
+          <span className="font-semibold">Share:</span>
+
+          <FaFacebook size={19} className="cursor-pointer" />
+          <FaInstagram size={19} className="cursor-pointer" />
+          <FaTwitter size={19} className="cursor-pointer" />
+          <FaYoutube size={19} className="cursor-pointer" />
+        </div>
+      </div>
         </div>
     );
 };

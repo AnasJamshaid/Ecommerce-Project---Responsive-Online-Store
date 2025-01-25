@@ -32,7 +32,7 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
       // Auto-close after 5 seconds if no action is in progress
       const timeout = setTimeout(() => {
         setIsCartVisible(false);
-      }, 1000);
+      }, 10000);
 
       // Clean up timeout on unmount or when actions are in progress
       return () => clearTimeout(timeout);
