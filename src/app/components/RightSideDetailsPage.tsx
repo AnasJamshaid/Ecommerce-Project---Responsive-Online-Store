@@ -6,11 +6,10 @@ import { getFoodDataById } from "@/sanity/dataFetching";
 import { FaFacebook, FaInstagram, FaRegHeart, FaTwitter, FaYoutube } from "react-icons/fa";
 import CartSlideIn from "./CartSlideIn"; // Import the CartSlideIn component
 
-// Define the FoodItem type
 type FoodItem = {
     _id: string;
     name: string;
-    image?: string;
+    image?: string;  // image can be string or undefined
     available?: boolean;
     originalPrice?: string;
     price: string;
@@ -21,6 +20,11 @@ type FoodItem = {
     sku?: string;
     shortDescription?: string;
 };
+
+// Define the cart type where the product can have an image of type `string | undefined`
+const [cart, setCart] = useState<{ [key: string]: { product: FoodItem; quantity: number } }>({});
+
+
 
 export const RightSideDetailsPage: React.FC = () => {
     const params = useParams();
