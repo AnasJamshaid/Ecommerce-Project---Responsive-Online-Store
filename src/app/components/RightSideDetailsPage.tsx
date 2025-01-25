@@ -22,11 +22,7 @@ type FoodItem = {
 };
 
 // Define the cart type where the product can have an image of type `string | undefined`
-const [cart, setCart] = useState<{ [key: string]: { product: FoodItem; quantity: number } }>({});
-
-
-
-export const RightSideDetailsPage: React.FC = () => {
+const RightSideDetailsPage: React.FC = () => {
     const params = useParams();
     const id = params.id as string;
     const [product, setProduct] = useState<FoodItem | null>(null);
@@ -200,56 +196,34 @@ export const RightSideDetailsPage: React.FC = () => {
             <div className="mt-6 space-y-4 text-gray-800">
                 {/* Wishlist and Compare */}
                 <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-                        <FaRegHeart size={20} />
-                        <span className="font-medium">Add to Wishlist</span>
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <FaRegHeart />
+                        Add to Wishlist
                     </button>
-                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-                        <PiGitDiffBold size={20} />
-                        <span className="font-medium">Compare</span>
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <PiGitDiffBold />
+                        Add to Compare
                     </button>
                 </div>
-                {/* Categories */}
-                <div className="flex items-start gap-2">
-                    <span className="font-semibold">Categories:</span>
-                    <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
-                </div>
 
-                {/* Tags */}
-                <div className="flex items-start gap-2">
-                    <span className="font-semibold">Tags:</span>
-                    <span className="text-gray-600">{product?.tags?.join(" | ") || "N/A"}</span>
+                {/* Social Media Links */}
+                <div className="flex items-center space-x-4">
+                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <FaFacebook size={24} />
+                    </a>
+                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <FaInstagram size={24} />
+                    </a>
+                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <FaTwitter size={24} />
+                    </a>
+                    <a href="#" className="text-gray-600 hover:text-[#FF9F0D] transition-colors duration-300">
+                        <FaYoutube size={24} />
+                    </a>
                 </div>
-
-                {/* SKU */}
-                <div className="flex items-start gap-2">
-                    <span className="font-semibold">SKU:</span>
-                    <span className="text-gray-600">{product?.sku || "N/A"}</span>
-                </div>
-
-                {/* Share Icons */}
-                <div>
-                    <div className="flex items-center gap-3">
-                        <span className="font-semibold">Share:</span>
-                        <div className="flex items-center gap-2">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                <FaFacebook size={18} />
-                            </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                <FaTwitter size={18} />
-                            </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                <FaInstagram size={18} />
-                            </a>
-                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition-all duration-300">
-                                <FaYoutube size={18} />
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div className="mt-2 border-b border-gray-300"></div>
-
             </div>
         </div>
     );
 };
+
+export default RightSideDetailsPage;
