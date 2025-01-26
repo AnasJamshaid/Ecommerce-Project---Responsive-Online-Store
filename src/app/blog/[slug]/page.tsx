@@ -7,7 +7,7 @@ import { Footer } from "@/app/components/Footer";
 import Breadcrumb from "@/app/components/Breadcrumb";
 import Sidebar from "@/app/components/Sidebar";
 import { FaCalendarAlt, FaComments } from "react-icons/fa";
-import { PiUserCirclePlus } from "react-icons/pi";
+import { PiQuotesThin, PiUserCirclePlus } from "react-icons/pi";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
 import CommentForm from "@/app/components/CommentForm";
 
@@ -170,6 +170,17 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
             <div className="mt-6 text-lg text-gray-700">
               <p>{blogPost.description}</p>
             </div>
+{/* Highlighted Section */}
+<div className="mt-8 p-3 bg-[#FF9F0D] border-l-4 rounded-xl shadow-lg border-[#FF9F0D] text-gray-800 flex items-center space-x-4">
+  {/* Comma Icon */}
+  <PiQuotesThin className="text-white text-9xl" />
+  
+  {/* Highlighted Content */}
+  <p className="text-base text-white font-bold">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+  </p>
+</div>
+<br />
             <hr className="my-4 border-t-2 border-gray-300" />
             {/* Tags and Social Media Section */}
             <div className=" flex justify-between items-center  pt-6">
