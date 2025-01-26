@@ -61,31 +61,35 @@ const RightSideDetailsPage: React.FC = () => {
 
     const handleAddToCart = () => {
         if (quantity > 0 && product) {
-            setCart((prevCart) => {
-                const updatedCart = {
-                    ...prevCart,
-                    [product._id]: {
-                        product,
-                        quantity: prevCart[product._id] ? prevCart[product._id].quantity + quantity : quantity,
-                    },
-                };
+            try {
+                // Update cart state
+                setCart((prevCart) => {
+                    const updatedCart = {
+                        ...prevCart,
+                        [product._id]: {
+                            product,
+                            quantity: prevCart[product._id] ? prevCart[product._id].quantity + quantity : quantity,
+                        },
+                    };
 
-                // Save updated cart to localStorage
-                localStorage.setItem("cart", JSON.stringify(updatedCart));
+                    // Save updated cart to localStorage
+                    localStorage.setItem("cart", JSON.stringify(updatedCart));
 
-                return updatedCart;
-            });
-            alert(`Added ${quantity} ${product.name}(s) to cart!`);
-            setIsCartVisible(true); // Show cart slice/modal when added
+                    return updatedCart;
+                });
+
+                // Display confirmation message
+                alert(`Added ${quantity} ${product.name}(s) to cart!`);
+                setIsCartVisible(true); // Show cart slice/modal when added
+            } catch (error) {
+                console.error("Error adding to cart:", error);
+                alert("There was an error adding the product to your cart. Please try again.");
+            }
         } else {
             alert("Please select a valid quantity!");
         }
     };
-
-    const handleCheckout = () => {
-        // Handle checkout logic here, like navigating to a checkout page or showing a checkout form
-        alert("Proceeding to checkout...");
-    };
+    const handleAddToCartTyped: () => void = handleAddToCart;
 
     return (
         <div className="flex-1">
@@ -187,7 +191,12 @@ const RightSideDetailsPage: React.FC = () => {
 
                     {/* Display Cart Slide-In */}
                     {isCartVisible && (
-                        <CartSlideIn cart={cart} setIsCartVisible={setIsCartVisible} onCheckout={handleCheckout} updateCart={setCart} />
+                        <CartSlideIn
+                            cart={cart as any} // Cast to any type
+                            setIsCartVisible={setIsCartVisible as any} // Cast to any type
+                            onCheckout={handleAddToCart as any} // Cast to any type
+                            updateCart={setCart as any} // Cast to any type
+                        />
                     )}
                 </div>
             </div>
@@ -195,40 +204,40 @@ const RightSideDetailsPage: React.FC = () => {
             <div className="mt-2 border-b border-gray-300"></div>
 
             <div className="mt-6 space-y-4 text-gray-800">
-        {/* Wishlist and Compare */}
-        <div className="flex items-center gap-4">
-          <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-            <FaRegHeart size={20} />
-            <span className="font-medium">Add to Wishlist</span>
-          </button>
-          <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
-            <PiGitDiffBold size={20} />
-            <span className="font-medium">Compare</span>
-          </button>
-        </div>
+                {/* Wishlist and Compare */}
+                <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+                        <FaRegHeart size={20} />
+                        <span className="font-medium">Add to Wishlist</span>
+                    </button>
+                    <button className="flex items-center gap-2 text-gray-700 hover:text-[#FF9F0D] transition-all duration-300">
+                        <PiGitDiffBold size={20} />
+                        <span className="font-medium">Compare</span>
+                    </button>
+                </div>
 
-        {/* Categories */}
-        <div className="flex items-start gap-2">
-          <span className="font-semibold">Categories:</span>
-          <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
-        </div>
+                {/* Categories */}
+                <div className="flex items-start gap-2">
+                    <span className="font-semibold">Categories:</span>
+                    <span className="text-gray-600">{product?.categories?.join(", ") || "N/A"}</span>
+                </div>
 
-        {/* Tags */}
-        <div className="flex items-start gap-2">
-          <span className="font-semibold">Tags:</span>
-          <span className="text-gray-600">{product?.tags?.join(", ") || "N/A"}</span>
-        </div>
+                {/* Tags */}
+                <div className="flex items-start gap-2">
+                    <span className="font-semibold">Tags:</span>
+                    <span className="text-gray-600">{product?.tags?.join(", ") || "N/A"}</span>
+                </div>
 
-        {/* Social Media */}
-        <div className="flex items-center gap-6">
-          <span className="font-semibold">Share:</span>
+                {/* Social Media */}
+                <div className="flex items-center gap-6">
+                    <span className="font-semibold">Share:</span>
 
-          <FaFacebook size={19} className="cursor-pointer" />
-          <FaInstagram size={19} className="cursor-pointer" />
-          <FaTwitter size={19} className="cursor-pointer" />
-          <FaYoutube size={19} className="cursor-pointer" />
-        </div>
-      </div>
+                    <FaFacebook size={19} className="cursor-pointer" />
+                    <FaInstagram size={19} className="cursor-pointer" />
+                    <FaTwitter size={19} className="cursor-pointer" />
+                    <FaYoutube size={19} className="cursor-pointer" />
+                </div>
+            </div>
         </div>
     );
 };

@@ -9,17 +9,11 @@ interface FoodItem {
 
 
 interface CartSlideInProps {
-
   cart: { [key: string]: { product: FoodItem; quantity: number } };
-
-  setIsCartVisible: (isVisible: boolean) => void;
-
+  setIsCartVisible: React.Dispatch<React.SetStateAction<boolean>>;
   onCheckout: () => void;
-
   updateCart: React.Dispatch<React.SetStateAction<{ [key: string]: { product: FoodItem; quantity: number } }>>;
-
 }
-
 
 const CartSlideIn: React.FC<CartSlideInProps> = ({
   cart,
@@ -27,6 +21,7 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({
   onCheckout,
   updateCart,
 }) => {
+ 
   const [isVisible, setIsVisible] = useState<boolean>(false); // Explicitly define the type as boolean
   const [isActionInProgress, setIsActionInProgress] = useState<boolean>(false); // Explicitly define the type as boolean
 
