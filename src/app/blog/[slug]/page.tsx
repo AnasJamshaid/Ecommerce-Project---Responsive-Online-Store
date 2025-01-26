@@ -1,192 +1,251 @@
 "use client"; // Ensure this is a client-side component
 
-import { useState, useEffect } from "react";
-import { getPostData } from "@/sanity/getPostData"; // Import the function to fetch data
-import imageUrlBuilder from "@sanity/image-url"; // Import the image URL builder
-import { createClient } from "@sanity/client"; // Import the sanity client
-import Image from "next/image"; // Import the Image component from next/image
-import Breadcrumb from "@/app/components/Breadcrumb";
+import React, { useEffect, useState } from "react";
+import { createClient } from "@sanity/client";
 import SecondHeader from "@/app/components/SecondHeader";
 import { Footer } from "@/app/components/Footer";
+import Breadcrumb from "@/app/components/Breadcrumb";
 import Sidebar from "@/app/components/Sidebar";
+import { FaCalendarAlt, FaComments } from "react-icons/fa";
+import { PiUserCirclePlus } from "react-icons/pi";
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
+import CommentForm from "@/app/components/CommentForm";
 
-// Initialize Sanity client
-const sanityClient = createClient({
-  projectId: "yourProjectId", // Replace with your Sanity project ID
-  dataset: "yourDataset", // Replace with your Sanity dataset
+// Function to format date
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+interface BlogPost {
+  title: string;
+  date: string;
+  author: string;
+  description: string; // Blog description
+  content: string; // Full blog content
+  comments: number;
+  imageUrl: string;
+  tags?: string[]; // Optional tags property
+}
+
+const client = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "yourProjectId",
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "yourDataset",
+  apiVersion: "2023-01-01",
   useCdn: true,
 });
 
-// Initialize Image URL builder
-const builder = imageUrlBuilder(sanityClient);
-
-// Helper function to generate the image URL
-const urlFor = (source: any) => builder.image(source).url();
-
-// Define PostData interface with tags
-interface PostData {
-  title: string;
-  author: string;
-  date: string;
-  comments: number;
-  imageUrl: {
-    asset: {
-      _ref: string;
-    };
-  } | null;
-  description: string;
-  content: string;
-  tags: string[]; // Add tags array to interface
+interface BlogDetailsProps {
+  params: {
+    slug: string;
+  };
 }
 
-const BlogPost = ({ params }: { params: { slug: string } }) => {
-  const [postData, setPostData] = useState<PostData | null>(null);
+const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
+  const { slug } = params;
+
+  const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const { slug } = params; // Extract the slug from the URL params
-    console.log("Slug from URL:", slug); // Debugging the slug
+    if (!slug) return;
 
-    const fetchPostData = async () => {
+    const fetchBlogPost = async () => {
+      const query = `*[_type == "blogPost" && slug.current == $slug][0]{
+        title,
+        date,
+        author,
+        description,
+        content,
+        comments,
+        "imageUrl": image.asset->url,
+        tags[] 
+      }`;
+
       try {
-        // Fetch the post data using the getPostData function
-        const data = await getPostData(slug);
-
-        if (data) {
-          console.log("Post data:", data); // Log the fetched post data
-          setPostData(data);
-          setLoading(false);
+        const data = await client.fetch(query, { slug });
+        if (!data) {
+          setError("Blog post not found.");
+        } else {
+          setBlogPost(data);
         }
-      } catch (error) {
-        console.error("Error fetching post data:", error);
+      } catch (err) {
+        setError("Error fetching blog post. Please try again later.");
+        console.error("Error fetching blog post:", err);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchPostData();
-  }, [params]); // Run effect on params change
+    fetchBlogPost();
+  }, [slug]);
 
   if (loading) {
     return (
-      <div className="main-container">
-        <SecondHeader />
-        
-        <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
-          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-          <div className="relative flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold text-center font-helvetica">Blog Details</h1>
-            <Breadcrumb />
-          </div>
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-7xl p-6 space-y-4">
+          <div className="flex flex-col lg:flex-row gap-8">
+            {/* Left Side Content Skeleton */}
+            <div className="w-full lg:w-2/3">
+              <div className="bg-gray-200 animate-pulse h-72 rounded-lg mb-6"></div> {/* Hero Image Skeleton */}
+              <div className="space-y-4">
+                <div className="h-6 bg-gray-200 animate-pulse w-3/4 rounded"></div> {/* Title Skeleton */}
+                <div className="h-4 bg-gray-200 animate-pulse w-1/2 rounded"></div> {/* Metadata Skeleton */}
+                <div className="h-4 bg-gray-200 animate-pulse w-full rounded"></div> {/* Description Skeleton */}
+                <div className="h-8 bg-gray-200 animate-pulse w-full rounded"></div> {/* Content Skeleton */}
+              </div>
+            </div>
 
-        <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
-          {/* Main Content Skeleton Loader */}
-          <div className="lg:w-2/3">
-            <div className="animate-pulse">
-              <div className="bg-gray-300 h-12 w-3/4 mb-4"></div> {/* Title skeleton */}
-              <div className="bg-gray-300 h-6 w-1/4 mb-4"></div> {/* Author and date skeleton */}
-              <div className="bg-gray-300 h-64 mb-6"></div> {/* Image skeleton */}
-              <div className="bg-gray-300 h-8 w-1/4 mb-4"></div> {/* Tags skeleton */}
-              <div className="bg-gray-300 h-6 w-3/4 mb-4"></div> {/* Description skeleton */}
-              <div className="bg-gray-300 h-48 mb-8"></div> {/* Content skeleton */}
+            {/* Right Side Sidebar */}
+            <div className="lg:w-1/3">
+              <Sidebar />
             </div>
           </div>
-
-          {/* Sidebar */}
-          <div className="lg:w-1/3 mt-8 lg:mt-0">
-            <Sidebar />
-          </div>
         </div>
-
-        <Footer />
       </div>
     );
   }
 
-  if (!postData) {
-    return <div>No post found.</div>; // Handle the case when no post data is returned
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-xl font-semibold text-red-500">{error}</p>
+      </div>
+    );
   }
 
-  // Debugging: Log imageUrl to see its structure
-  console.log("Post image URL:", postData.imageUrl);
-
-  // Generate the image URL using the helper function, if imageUrl is valid
-  const imageUrl = postData.imageUrl ? urlFor(postData.imageUrl).toString() : "/fallback-image.jpg";
-
-  console.log("Generated image URL:", imageUrl); // Debugging generated URL
-  const pageTitle = "Blog Details";
+  if (!blogPost) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <p className="text-xl font-semibold">Blog post not found.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="main-container">
+    <div className="bg-gray-50">
+      {/* Header Section */}
       <SecondHeader />
-      
+
+      {/* Hero Section */}
       <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative flex flex-col items-center justify-center h-full space-y-4">
-          <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
+          <h1 className="text-4xl font-bold text-center">Blog Details</h1>
           <Breadcrumb />
         </div>
       </div>
 
-      <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
-        {/* Main Content */}
-        <div className="lg:w-2/3">
-          <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
-          <div className="text-sm text-gray-500 mb-4">
-            <span>{postData.author}</span> |{" "}
-            <span>{new Date(postData.date).toLocaleDateString()}</span> |{" "}
-            <span>{postData.comments} Comments</span>
+      {/* Blog Post Content */}
+      <div className="container mx-auto py-16 px-4">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Left Side Content */}
+          <div className="w-full lg:w-2/3">
+            <img
+              src={blogPost.imageUrl || "/fallback-image.jpg"}
+              alt={blogPost.title || "Blog Image"}
+              className="w-full h-96 object-cover rounded-lg shadow-md"
+            />
+            <div className="mt-6 text-gray-500">
+              <div className="flex items-center text-black text-sm space-x-4">
+                <span className="flex items-center text-[#FFA500]">
+                  <FaCalendarAlt size={14} className="mr-1" />
+                  {formatDate(blogPost.date)}
+                </span>
+                <span className="text-black">/</span>
+                <span className="flex items-center text-[#FFA500]">
+                  <FaComments size={14} className="mr-1" />
+                  {blogPost.comments} Comments
+                </span>
+                <span className="text-black">/</span>
+                <span className="flex items-center text-[#FFA500]">
+                  <PiUserCirclePlus size={14} className="mr-1" />
+                  {blogPost.author}
+                </span>
+              </div>
+              <h2 className="text-2xl mt-7 font-bold text-gray-800">{blogPost.title}</h2>
+              <hr className="my-4 border-t-2 border-gray-300" />
+            </div>
+            <div className="mt-6 text-lg text-gray-700">
+              <p>{blogPost.description}</p>
+            </div>
+            <hr className="my-4 border-t-2 border-gray-300" />
+            {/* Tags and Social Media Section */}
+            <div className=" flex justify-between items-center  pt-6">
+              {/* Left Side: Tags */}
+              {blogPost.tags && blogPost.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <h3 className="text-xl font-semibold">Tags:</h3>
+                  {blogPost.tags.map((tag, index) => (
+                    <span key={index} className="px-4 py-2 bg-gray-200 text-gray-700 rounded-full text-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Right Side: Social Media Icons */}
+              <div className="flex items-center space-x-4">
+                <h3 className="text-xl font-semibold text-gray-700 mb-0 mr-4">Share this post:</h3>
+
+                <div className="flex space-x-4 items-center">
+                  <a
+                    href="#"
+                    aria-label="Facebook"
+                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
+                  >
+                    <FaFacebookF size={14} />
+                  </a>
+
+                  <a
+                    href="#"
+                    aria-label="Twitter"
+                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
+                  >
+                    <FaTwitter size={14} />
+                  </a>
+
+                  <a
+                    href="#"
+                    aria-label="Instagram"
+                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
+                  >
+                    <FaInstagram size={14} />
+                  </a>
+
+                  <a
+                    href="#"
+                    aria-label="LinkedIn"
+                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
+                  >
+                    <FaLinkedinIn size={14} />
+                  </a>
+                </div>
+              </div>
+
+            </div> 
+            <br />
+            <hr className="my-4 border-t-2 border-gray-300" />
+
+            <div className="mt-10">   <CommentForm /></div>
+
           </div>
 
-          {/* Image rendering with error handling */}
-          <img
-            src={postData.imageUrl} // Use the state variable for the image source
-            alt={postData.title}
-            className="w-full h-96 object-cover mb-6"
-            width={1200} // Set a width for the image
-            height={600} // Set a height for the image
-            onError={() => {
-              console.log("Image failed to load, setting fallback image");
-            }}
-          />
-
-          {/* Display tags if available */}
-          {postData.tags && postData.tags.length > 0 && (
-            <div className="mt-4 mb-8">
-              <h2 className="text-xl font-semibold">Tags:</h2>
-              <ul className="flex gap-2 flex-wrap">
-                {postData.tags.map((tag, index) => (
-                  <li key={index} className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          <p className="text-lg text-gray-700 mb-8">{postData.description}</p>
-
-          {/* Render content if available */}
-          {postData.content && (
-            <div className="mt-8">
-              <h2 className="text-2xl font-semibold">Content</h2>
-              <div
-                className="text-gray-800 mt-4"
-                dangerouslySetInnerHTML={{ __html: postData.content }}
-              />
-            </div>
-          )}
-        </div>
-
-        {/* Sidebar */}
-        <div className="lg:w-1/3 mt-8 lg:mt-0">
-          <Sidebar />
+          {/* Right Side Sidebar */}
+          <div className="lg:w-1/3">
+            <Sidebar />
+          </div>
         </div>
       </div>
 
+      {/* Footer Section */}
       <Footer />
     </div>
   );
 };
 
-export default BlogPost;
+
+
+
+export default BlogDetails;
