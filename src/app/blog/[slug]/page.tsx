@@ -139,7 +139,7 @@ const BlogPost = ({ params }: { params: { slug: string } }) => {
           </div>
 
           {/* Image rendering with error handling */}
-          <Image
+          <img
             src={postData.imageUrl} // Use the state variable for the image source
             alt={postData.title}
             className="w-full h-96 object-cover mb-6"
