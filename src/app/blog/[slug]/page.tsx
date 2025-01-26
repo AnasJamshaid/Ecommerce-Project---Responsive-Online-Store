@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+'use client'
+
+import React, { useState, useEffect } from "react";
 import { createClient } from "@sanity/client";
 import SecondHeader from "@/app/components/SecondHeader";
 import { Footer } from "@/app/components/Footer";
@@ -6,8 +8,9 @@ import Breadcrumb from "@/app/components/Breadcrumb";
 import Sidebar from "@/app/components/Sidebar";
 import { FaCalendarAlt, FaComments } from "react-icons/fa";
 import { PiQuotesThin, PiUserCirclePlus } from "react-icons/pi";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa'
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import CommentForm from "@/app/components/CommentForm";
+import { useParams } from 'next/navigation';  // For dynamic routing in app directory
 
 // Function to format date
 const formatDate = (dateString: string) => {
@@ -33,19 +36,12 @@ const client = createClient({
   useCdn: true,
 });
 
-interface BlogDetailsProps {
-  params: {
-    slug: string;
-  };
-}
-
-// Ensure that the component is typed to accept params properly
-const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
-  const { slug } = params;
-
+const BlogDetails: React.FC = () => {
   const [blogPost, setBlogPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { slug } = useParams();  // Using useParams to grab the dynamic slug from URL
 
   useEffect(() => {
     if (!slug) return;
@@ -85,18 +81,16 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="w-full max-w-7xl p-6 space-y-4">
           <div className="flex flex-col lg:flex-row gap-8">
-            {/* Left Side Content Skeleton */}
             <div className="w-full lg:w-2/3">
-              <div className="bg-gray-200 animate-pulse h-72 rounded-lg mb-6"></div> {/* Hero Image Skeleton */}
+              <div className="bg-gray-200 animate-pulse h-72 rounded-lg mb-6"></div>
               <div className="space-y-4">
-                <div className="h-6 bg-gray-200 animate-pulse w-3/4 rounded"></div> {/* Title Skeleton */}
-                <div className="h-4 bg-gray-200 animate-pulse w-1/2 rounded"></div> {/* Metadata Skeleton */}
-                <div className="h-4 bg-gray-200 animate-pulse w-full rounded"></div> {/* Description Skeleton */}
-                <div className="h-8 bg-gray-200 animate-pulse w-full rounded"></div> {/* Content Skeleton */}
+                <div className="h-6 bg-gray-200 animate-pulse w-3/4 rounded"></div>
+                <div className="h-4 bg-gray-200 animate-pulse w-1/2 rounded"></div>
+                <div className="h-4 bg-gray-200 animate-pulse w-full rounded"></div>
+                <div className="h-8 bg-gray-200 animate-pulse w-full rounded"></div>
               </div>
             </div>
 
-            {/* Right Side Sidebar */}
             <div className="lg:w-1/3">
               <Sidebar />
             </div>
@@ -124,10 +118,7 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
 
   return (
     <div className="bg-gray-50">
-      {/* Header Section */}
       <SecondHeader />
-
-      {/* Hero Section */}
       <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
         <div className="relative flex flex-col items-center justify-center h-full space-y-4">
@@ -136,10 +127,8 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
         </div>
       </div>
 
-      {/* Blog Post Content */}
       <div className="container mx-auto py-16 px-4">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Side Content */}
           <div className="w-full lg:w-2/3">
             <img
               src={blogPost.imageUrl || "/fallback-image.jpg"}
@@ -170,18 +159,15 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
               <p>{blogPost.description}</p>
             </div>
 
-            {/* Highlighted Section */}
             <div className="mt-8 p-3 bg-[#FF9F0D] border-l-4 rounded-xl shadow-lg border-[#FF9F0D] text-gray-800 flex items-center space-x-4">
               <PiQuotesThin className="text-white text-9xl" />
               <p className="text-base text-white font-bold">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
               </p>
             </div>
-
+            <br />
             <hr className="my-4 border-t-2 border-gray-300" />
-            {/* Tags and Social Media Section */}
-            <div className="flex justify-between items-center pt-6">
-              {/* Left Side: Tags */}
+            <div className=" flex justify-between items-center pt-6">
               {blogPost.tags && blogPost.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   <h3 className="text-xl font-semibold">Tags:</h3>
@@ -193,55 +179,34 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
                 </div>
               )}
 
-              {/* Right Side: Social Media Icons */}
               <div className="flex items-center space-x-4">
                 <h3 className="text-xl font-semibold text-gray-700 mb-0 mr-4">Share this post:</h3>
                 <div className="flex space-x-4 items-center">
-                  <a
-                    href="#"
-                    aria-label="Facebook"
-                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
-                  >
-                    <FaFacebookF size={14} />
+                  <a href="#" className="p-2 rounded-full bg-gray-200 text-blue-500 hover:text-blue-700">
+                    <FaFacebookF size={18} />
                   </a>
-                  <a
-                    href="#"
-                    aria-label="Twitter"
-                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
-                  >
-                    <FaTwitter size={14} />
+                  <a href="#" className="p-2 rounded-full bg-gray-200 text-blue-400 hover:text-blue-600">
+                    <FaTwitter size={18} />
                   </a>
-                  <a
-                    href="#"
-                    aria-label="Instagram"
-                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
-                  >
-                    <FaInstagram size={14} />
+                  <a href="#" className="p-2 rounded-full bg-gray-200 text-pink-500 hover:text-pink-700">
+                    <FaInstagram size={18} />
                   </a>
-                  <a
-                    href="#"
-                    aria-label="LinkedIn"
-                    className="bg-gray-300 hover:bg-[#FF9F0D] p-3 rounded-full text-gray-700 hover:text-white transition-all duration-300"
-                  >
-                    <FaLinkedinIn size={14} />
+                  <a href="#" className="p-2 rounded-full bg-gray-200 text-blue-700 hover:text-blue-900">
+                    <FaLinkedinIn size={18} />
                   </a>
                 </div>
               </div>
             </div>
-            <hr className="my-4 border-t-2 border-gray-300" />
-            <div className="mt-10">
-              <CommentForm />
-            </div>
+
+            <CommentForm />
           </div>
 
-          {/* Right Side Sidebar */}
-          <div className="lg:w-1/3">
+          <div className="w-full lg:w-1/3">
             <Sidebar />
           </div>
         </div>
       </div>
 
-      {/* Footer Section */}
       <Footer />
     </div>
   );
