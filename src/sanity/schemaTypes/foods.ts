@@ -9,6 +9,16 @@ const foods = {
       title: 'Food Name',
     },
     {
+      name: 'slug',
+      type: 'slug',
+      title: 'Slug',
+      description: 'Auto-generated slug based on the food name',
+      options: {
+        source: 'name', // Automatically generate the slug from the `name` field
+        maxLength: 96, // Optional: Set a max length for the slug
+      },
+    },
+    {
       name: 'categories',
       type: 'array',
       title: 'Categories',

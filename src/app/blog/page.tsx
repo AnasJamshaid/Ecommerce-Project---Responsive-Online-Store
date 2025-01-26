@@ -1,4 +1,6 @@
-import React from "react";
+'use client'
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FaCalendarAlt, FaComments } from "react-icons/fa";
 import SecondHeader from "../components/SecondHeader";
@@ -7,149 +9,180 @@ import Sidebar from "../components/Sidebar";
 import { Footer } from "../components/Footer";
 import { MdArrowOutward } from "react-icons/md";
 import { PiUserCirclePlus } from "react-icons/pi";
+import { client } from "@/sanity/lib/client"; // Import the Sanity client
+import SkeletonLoader from "../components/SkeletonLoader"; // Import SkeletonLoader
 
-const BlogPage = () => {
-  const pageTitle = "Blog"; // Static title for the Blog page
-  const blogPosts = [
-    {
-      image: "/blogs1.jpg",
-      title: "10 Reasons To Do A Digital Detox Challenge",
-      date: "June 28, 2023",
-      comments: 15,
-      author: "Admin",
-      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec gravida urna ac nisi faucibus, non varius urna tincidunt.",
-      link: "/post/1",
-    },
-    {
-      image: "/blog2.jpg",
-      title: "Traditional Soft Pretzels with Sweet Beer Cheese",
-      date: "June 27, 2023",
-      comments: 20,
-      author: "Admin",
-      description: "Discover the best recipes for sweet beer cheese pizzas. These pretzels are sure to delight your taste buds!",
-      link: "/post/2",
-    },
-    {
-      image: "/blogs4.jpg",
-      title: "The Ultimate Hangover Burger: Egg in a Hole Burger",
-      date: "June 26, 2023",
-      comments: 10,
-      author: "Admin",
-      description: "A perfect recipe for recovering after a long night—easy to make and delicious.",
-      link: "/post/3",
-    },
-    {
-      image: "/about.png",
-      title: "My Favorite Easy Avocado Pizza Toast Recipe",
-      date: "June 25, 2023",
-      comments: 8,
-      author: "Admin",
-      description: "This avocado pizza toast recipe is healthy, easy, and perfect for breakfast.",
-      link: "/post/4",
-    },
-  ];
+interface BlogPost {
+  title: string;
+  date: string;
+  comments: number;
+  author: string;
+  description: string;
+  imageUrl: string;
+  link: string;
+}
+
+
+
+const BlogPage: React.FC = () => {
+  const pageTitle = "Blog";
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const [currentPage, setCurrentPage] = useState(1); // Track current page
+  const [postsPerPage] = useState(4); // Number of posts to show per page
+
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      const query = `*[_type == "blogPost"]{
+        title,
+        date,
+        comments,
+        author,
+        description,
+        "imageUrl": image.asset->url,
+        link
+      }`;
+      try {
+        const data = await client.fetch(query);
+        console.log('Fetched Data:', data); // Debugging data fetch
+        setBlogPosts(data);
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+      } finally {
+        setLoading(false); // Set loading to false when data is fetched
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
+
+  
+
+  const formatDate = (date: string): string => {
+    if (!date) return "Date not available";
+    return new Date(date).toLocaleDateString();
+  };
+
+  const extractMonth = (date: string): string => {
+    if (!date) return "Month not available";
+    return new Date(date).toLocaleString('default', { month: 'short' });
+  };
+
+  // Get the posts to display on the current page
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = blogPosts.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Handle page navigation
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Check if there are more posts
+  const totalPages = Math.ceil(blogPosts.length / postsPerPage);
 
   return (
     <>
       <div className="main-container">
-        {/* Header */}
         <SecondHeader />
-
-        {/* Banner Section */}
-        <div
-          className="relative text-white h-72 bg-cover bg-center"
-          style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your banner image URL
-        >
-          {/* Overlay */}
+        <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-
-          {/* Content */}
           <div className="relative flex flex-col items-center justify-center h-full space-y-4">
             <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
             <Breadcrumb />
           </div>
         </div>
 
-        {/* Blog Posts Section */}
         <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
-          {/* Blog Posts */}
           <div className="lg:w-2/3 space-y-6">
-            {blogPosts.map((post, index) => (
-              <div
-                key={index}
-                className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
-              >
-                {/* Image */}
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="object-cover w-full h-80 rounded-t-lg"
-                />
+            {loading ? (
+              // Show skeleton loaders for each post if loading is true
+              Array(4).fill(null).map((_, index) => (
+                <SkeletonLoader key={index} />
+              ))
+            ) : (
+              currentPosts.length > 0 ? (
+                currentPosts.map((post, index) => (
+                  <div key={index} className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <div className="relative">
+                      <img
+                        src={post.imageUrl || "/fallback-image.jpg"}
+                        alt={post.title}
+                        className="object-cover w-full h-80 rounded-t-lg"
+                      />
+                      <div className="absolute top-4 left-4 bg-[#FFA500] text-white rounded-xl py-3 px-4 shadow-lg">
+                        <div className="flex flex-col items-center space-y-1">
+                          <span className="text-xl font-bold">{new Date(post.date).getDate()}</span>
+                          <span className="text-xl font-semibold  tracking-wider">{extractMonth(post.date)}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="p-4 flex flex-col space-y-4">
+                      <div className="flex items-center text-black text-sm space-x-4">
+                        <span className="flex items-center text-[#FFA500]">
+                          <FaCalendarAlt size={14} className="mr-1" />
+                          {formatDate(post.date)}
+                        </span>
+                        <span className="text-black">/</span>
+                        <span className="flex items-center text-[#FFA500]">
+                          <FaComments size={14} className="mr-1" />
+                          {post.comments} Comments
+                        </span>
+                        <span className="text-black">/</span>
+                        <span className="flex items-center text-[#FFA500]">
+                          <PiUserCirclePlus size={14} className="mr-1" />
+                          {post.author}
+                        </span>
+                      </div>
+                      <h2 className="text-2xl font-bold border-b-2 border-gray-300 pb-2" style={{ fontFamily: "Helvetica, Arial, sans-serif" }}>
+                        {post.title}
+                      </h2>
+                      <p className="text-gray-600 text-sm line-clamp-3 font-inter" style={{ fontFamily: "Inter, Arial, sans-serif" }}>
+                        {post.description}
+                      </p>
+                      <Link
+                        href={`/blog/${post.title.replace(/\s+/g, '-').toLowerCase()}`} // Generate a URL-friendly slug from title
+                        className="self-start px-4 py-2 border border-[#FFA500] text-[#FFA500] rounded hover:bg-[#FFA500] hover:text-white flex items-center"
+                      >
+                        Read More
+                        <span className="ml-2">
+                          <MdArrowOutward />
+                        </span>
+                      </Link>
 
-                {/* Content */}
-                <div className="p-4 flex flex-col space-y-4">
-                  {/* Metadata */}
-                  <div className="flex items-center text-black text-sm space-x-4">
-                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                      <FaCalendarAlt size={14} className="mr-1" />
-                      {post.date}
-                    </span>
-                    <span className="text-black">/</span>
-                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                      <FaComments size={14} className="mr-1" />
-                      {post.comments} Comments
-                    </span>
-                    <span className="text-black">/</span>
-                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                      <PiUserCirclePlus size={14} className="mr-1" />
-                      {post.author}
-                    </span>
+                    </div>
                   </div>
-
-                  {/* Title */}
-                  <h2
-                    className="text-2xl font-bold border-b-2 border-gray-300 pb-2"
-                    style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
-                  >
-                    {post.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p
-                    className="text-gray-600 text-sm line-clamp-3 font-inter"
-                    style={{ fontFamily: "Inter, Arial, sans-serif" }}
-                  >
-                    {post.description}
-                  </p>
-
-                  {/* Read More */}
-                  <Link
-                    href={post.link}
-                    className="self-start px-4 py-2 border border-[#FFA500] text-[#FFA500] rounded hover:bg-[#FFA500] hover:text-white flex items-center"
-                  >
-                    Read More
-                    <span className="ml-2">
-                      <MdArrowOutward />
-                    </span>
-                  </Link>
-                </div>
-              </div>
-            ))}
-
-            {/* Pagination */}
+                ))
+              ) : (
+                <p className="text-center text-gray-200">No posts available.</p>
+              )
+            )}
             <div className="flex justify-center space-x-2 mt-6">
-              {[1, 2, 3].map((page) => (
+              <button
+                onClick={() => paginate(currentPage - 1)}
+                className="px-4 py-2 bg-gray-200 hover:bg-[#FFA500] rounded disabled:bg-gray-400"
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              {[...Array(totalPages)].map((_, index) => (
                 <button
-                  key={page}
-                  className="px-4 py-2 bg-gray-200 hover:bg-[#FFA500] rounded"
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-4 py-2 ${currentPage === index + 1 ? "bg-[#FFA500]" : "bg-gray-200"} hover:bg-[#FFA500] rounded`}
                 >
-                  {page}
+                  {index + 1}
                 </button>
               ))}
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                className="px-4 py-2 bg-gray-200 hover:bg-[#FFA500] rounded disabled:bg-gray-400"
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
             </div>
           </div>
-
-          {/* Sidebar */}
           <div className="flex">
             <Sidebar />
           </div>

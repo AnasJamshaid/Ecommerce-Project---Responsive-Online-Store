@@ -6,6 +6,47 @@ body {
   overflow-x: hidden;
  
 }
+
+/* SkeletonLoader.css */
+@keyframes shimmer {
+  0% {
+    background-position: -200%;
+  }
+  100% {
+    background-position: 200%;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    background-color: #e0e0e0;
+  }
+  50% {
+    background-color: #d4d4d4;
+  }
+  100% {
+    background-color: #e0e0e0;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #e0e0e0 25%, #d4d4d4 50%, #e0e0e0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+
+.animate-pulse {
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Additional styling for the loader components */
+
+
 /* Default styles for larger devices */
 .main-container {
   @apply max-w-screen-xl w-full h-screen mx-auto;

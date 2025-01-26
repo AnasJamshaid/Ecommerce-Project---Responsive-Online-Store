@@ -12,6 +12,7 @@ import SimilarProducts from "@/app/components/SimilarProducts";
 
 type FoodItem = {
   _id: string;
+  slug: string; // Add the slug field
   name: string;
   description: string;
   price: string;
