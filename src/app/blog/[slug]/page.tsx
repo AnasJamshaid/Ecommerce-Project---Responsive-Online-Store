@@ -1,5 +1,3 @@
-"use client"; // Ensure this is a client-side component
-
 import React, { useEffect, useState } from "react";
 import { createClient } from "@sanity/client";
 import SecondHeader from "@/app/components/SecondHeader";
@@ -41,6 +39,7 @@ interface BlogDetailsProps {
   };
 }
 
+// Ensure that the component is typed to accept params properly
 const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
   const { slug } = params;
 
@@ -170,20 +169,18 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
             <div className="mt-6 text-lg text-gray-700">
               <p>{blogPost.description}</p>
             </div>
-{/* Highlighted Section */}
-<div className="mt-8 p-3 bg-[#FF9F0D] border-l-4 rounded-xl shadow-lg border-[#FF9F0D] text-gray-800 flex items-center space-x-4">
-  {/* Comma Icon */}
-  <PiQuotesThin className="text-white text-9xl" />
-  
-  {/* Highlighted Content */}
-  <p className="text-base text-white font-bold">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
-  </p>
-</div>
-<br />
+
+            {/* Highlighted Section */}
+            <div className="mt-8 p-3 bg-[#FF9F0D] border-l-4 rounded-xl shadow-lg border-[#FF9F0D] text-gray-800 flex items-center space-x-4">
+              <PiQuotesThin className="text-white text-9xl" />
+              <p className="text-base text-white font-bold">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.
+              </p>
+            </div>
+
             <hr className="my-4 border-t-2 border-gray-300" />
             {/* Tags and Social Media Section */}
-            <div className=" flex justify-between items-center  pt-6">
+            <div className="flex justify-between items-center pt-6">
               {/* Left Side: Tags */}
               {blogPost.tags && blogPost.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -199,7 +196,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
               {/* Right Side: Social Media Icons */}
               <div className="flex items-center space-x-4">
                 <h3 className="text-xl font-semibold text-gray-700 mb-0 mr-4">Share this post:</h3>
-
                 <div className="flex space-x-4 items-center">
                   <a
                     href="#"
@@ -208,7 +204,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
                   >
                     <FaFacebookF size={14} />
                   </a>
-
                   <a
                     href="#"
                     aria-label="Twitter"
@@ -216,7 +211,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
                   >
                     <FaTwitter size={14} />
                   </a>
-
                   <a
                     href="#"
                     aria-label="Instagram"
@@ -224,7 +218,6 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
                   >
                     <FaInstagram size={14} />
                   </a>
-
                   <a
                     href="#"
                     aria-label="LinkedIn"
@@ -234,13 +227,11 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
                   </a>
                 </div>
               </div>
-
-            </div> 
-            <br />
+            </div>
             <hr className="my-4 border-t-2 border-gray-300" />
-
-            <div className="mt-10">   <CommentForm /></div>
-
+            <div className="mt-10">
+              <CommentForm />
+            </div>
           </div>
 
           {/* Right Side Sidebar */}
@@ -255,8 +246,5 @@ const BlogDetails: React.FC<BlogDetailsProps> = ({ params }) => {
     </div>
   );
 };
-
-
-
 
 export default BlogDetails;
