@@ -7,20 +7,20 @@ import { FaFacebook, FaInstagram, FaRegHeart, FaTwitter, FaYoutube } from "react
 import CartSlideIn from "./CartSlideIn"; // Import the CartSlideIn component
 
 
-type FoodItem = {
+
+interface FoodItem {
     _id: string;
     name: string;
-    image?: string;  // image can be string or undefined
-    available?: boolean;
-    originalPrice?: string;
-    price: string;
+    image?: string;
+    price: number;
+    originalPrice?: number;
     rating?: number;
     reviewCount?: number;
+    available: boolean;
     categories?: string[];
     tags?: string[];
-    sku?: string;
     shortDescription?: string;
-};
+}
 
 // Define the cart type where the product can have an image of type `string | undefined`
 const RightSideDetailsPage: React.FC = () => {
@@ -113,12 +113,12 @@ const RightSideDetailsPage: React.FC = () => {
             <div className="mt-4 flex items-center space-x-4">
                 {product?.originalPrice && (
                     <span className="text-2xl text-gray-400 line-through">
-                        {parseFloat(product.originalPrice).toFixed(2)} $
+                        {parseFloat(product.originalPrice.toString()).toFixed(2)} $
                     </span>
                 )}
                 {product?.originalPrice && <span className="text-2xl text-black">|</span>}
                 <span className="text-3xl font-bold text-black">
-                    {parseFloat(product?.price || "0.00").toFixed(2)} $
+                    {parseFloat((product?.price ?? "0.00").toString()).toFixed(2)} $
                 </span>
             </div>
 
