@@ -1,8 +1,11 @@
-import React from "react";
-import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaSearch } from "react-icons/fa";
-import Image from 'next/image';
+'use client'
+import React, { useState } from "react";
+import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube, FaSearch, FaEye } from "react-icons/fa";
+import Image from "next/image";
 
 const Sidebar = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const recentPosts = [
     { image: "/shopblog1.jpg", date: "June 28, 2023", title: "Lorem ipsum dolor sit amet..." },
     { image: "/shopblog2.jpg", date: "July 10, 2023", title: "Sed do eiusmod tempor incididunt..." },
@@ -16,6 +19,10 @@ const Sidebar = () => {
     { name: "Pizza", count: 16, image: "/blogmenu3.jpg" },
     { name: "Fresh Fruits", count: 38, image: "/blogmenu4.jpg" },
     { name: "Vegetables", count: 15, image: "/blogmenu5.jpg" },
+  ];
+
+  const popularTags = [
+    "Food", "Healthy", "Fruits", "Burger", "Pizza", "Veggies", "Snacks", "Chicken"
   ];
 
   const photoGallery = [
@@ -42,15 +49,17 @@ const Sidebar = () => {
           </button>
         </div>
       </div>
+
       {/* Profile Section */}
       <div className="text-center border border-gray-300 rounded-lg p-4 shadow-md">
-        <Image
-          src="/profile1.jpg"
-          alt="Profile"
-          width={80}
-          height={80}
-          className="mx-auto rounded-full border-4 border-[#FF9F0D]"
-        />
+      <div className="relative w-20 h-30 mx-auto rounded-full overflow-hidden border-[#FF9F0D] border-4 shadow-md">
+          <Image
+            src="/profile1.jpg"
+            alt="Profile"
+            width={80}
+            height={80}
+          />
+        </div>
         <h3 className="mt-2 font-semibold text-xl text-[#FF9F0D]">Prince Miyako</h3>
         <p className="text-sm text-gray-500">Blogger & Photographer</p>
         <div className="text-[#FF9F0D] flex justify-center space-x-1 mt-1 text-sm">
@@ -60,106 +69,141 @@ const Sidebar = () => {
           <span className="text-gray-500">(5 Reviews)</span>
         </div>
         <div className="flex justify-center space-x-4 mt-3">
-          <a href="#" className="text-gray-500 hover:text-[#FF9F0D]">
-            <FaFacebook size={20} />
-          </a>
-          <a href="#" className="text-gray-500 hover:text-[#FF9F0D]">
-            <FaTwitter size={20} />
-          </a>
-          <a href="#" className="text-gray-500 hover:text-[#FF9F0D]">
-            <FaInstagram size={20} />
-          </a>
-          <a href="#" className="text-gray-500 hover:text-[#FF9F0D]">
-            <FaLinkedin size={20} />
-          </a>
+          {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin].map((Icon, i) => (
+            <div key={i} className="bg-[#FF9F0D] p-2 rounded-lg shadow-md hover:scale-105 transition">
+              <Icon className="text-white" size={20} />
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Recent Posts */}
+      {/* Recent Posts Section */}
       <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Recent Posts</h3>
+        <h3 className="font-semibold text-lg text-[#FF9F0D] mb-4">Recent Posts</h3>
         <div className="space-y-4">
           {recentPosts.map((post, index) => (
-            <div key={index} className="flex items-center space-x-4">
-              <Image
-                src={post.image}
-                alt="Post"
-                width={64}
-                height={64}
-                className="rounded-lg shadow-md object-cover"
-              />
-              <div>
-                <p className="text-sm text-gray-500">{post.date}</p>
-                <p className="text-sm font-medium text-gray-800">{post.title}</p>
+            <div key={index} className="space-y-2">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={post.image}
+                    alt={post.title}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm text-gray-500">{post.date}</p>
+                  <h4 className="text-sm font-medium text-black hover:text-[#FF9F0D] transition">
+                    {post.title}
+                  </h4>
+                </div>
               </div>
+              <hr className="border-gray-300" />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Filter By Menu */}
+      {/* Filter Menu Section */}
       <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Filter By Menu</h3>
+        <h3 className="font-semibold text-lg text-[#FF9F0D] mb-4">Filter by Menu</h3>
         <div className="space-y-4">
-          {filterByMenu.map((item) => (
-            <div key={item.name} className="flex items-center space-x-4">
+          {filterByMenu.map((menu, index) => (
+            <div key={index} className="flex justify-between items-center space-x-4">
+              <div className="flex items-center space-x-4">
+                <div className="relative w-16 h-16">
+                  <Image
+                    src={menu.image}
+                    alt={menu.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                  />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-black">{menu.name}</p>
+                </div>
+              </div>
+              <p className="text-sm text-gray-500">{menu.count} Items</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Popular Tags Section */}
+      <div className="border border-gray-300 rounded-lg p-4 shadow-md">
+        <h3 className="font-semibold text-lg text-[#FF9F0D] mb-4">Popular Tags</h3>
+        <div className="flex flex-wrap gap-2">
+          {popularTags.map((tag, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 text-sm bg-[#FF9F0D] text-white rounded-full cursor-pointer hover:bg-[#e6890c] transition"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Photo Gallery Section */}
+      <div className="border border-gray-300 rounded-lg p-4 shadow-md">
+        <h3 className="font-semibold text-lg text-[#FF9F0D] mb-4">Photo Gallery</h3>
+        <div className="grid grid-cols-3 gap-2">
+          {photoGallery.map((photo, index) => (
+            <div key={index} className="relative w-full h-24 group">
               <Image
-                src={item.image}
-                alt={item.name}
-                width={96}
-                height={56}
-                className="rounded-lg shadow-md object-cover"
+                src={photo}
+                alt={`Gallery Image ${index + 1}`}
+                layout="fill"
+                objectFit="cover"
+                className="rounded-lg cursor-pointer"
+                onClick={() => setSelectedImage(photo)}
               />
-              <div className="flex justify-between w-full">
-                <span className="text-sm text-gray-700">{item.name}</span>
-                <span className="text-sm text-gray-500">({item.count})</span>
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 flex items-center justify-center">
+                <FaEye className="text-white text-2xl" />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Photo Gallery */}
-      <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Photo Gallery</h3>
-        <div className="grid grid-cols-3 gap-2">
-          {photoGallery.map((image, index) => (
+      {/* Modal for Viewing Larger Image */}
+      {selectedImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="relative max-w-4xl max-h-full p-4">
             <Image
-              key={index}
-              src={image}
-              alt="Gallery"
-              width={80}
-              height={80}
-              className="rounded-lg object-cover shadow-md"
+              src={selectedImage}
+              alt="Larger View"
+              layout="intrinsic"
+              width={1000}
+              height={1000}
+              className="rounded-lg"
             />
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-0 right-0 p-4 text-white bg-black opacity-50 hover:opacity-100"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Social Media Section */}
+
+      <div className="border border-gray-300 rounded-lg p-4 shadow-md mt-6">
+        <h3 className="font-semibold text-lg text-[#FF9F0D] mb-4">Follow Us</h3>
+        <div className="flex justify-center space-x-6">
+          {[FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaPinterest, FaYoutube].map((Icon, i) => (
+            <div key={i} className="bg-[#FF9F0D] p-2  shadow-md hover:scale-105 transition">
+              <Icon className="text-white" size={20} />
+            </div>
           ))}
         </div>
       </div>
 
-      {/* Follow Us */}
-      <div className="border border-gray-300 rounded-lg p-4 shadow-md">
-        <h3 className="font-semibold text-lg mb-3 text-[#FF9F0D]">Follow Us</h3>
-        <div className="flex justify-center space-x-6 bg-[#FF9F0D] p-2 rounded-lg">
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaFacebook size={24} />
-          </a>
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaTwitter size={24} />
-          </a>
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaInstagram size={24} />
-          </a>
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaLinkedin size={24} />
-          </a>
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaPinterest size={24} />
-          </a>
-          <a href="#" className="text-white hover:text-gray-500">
-            <FaYoutube size={24} />
-          </a>
-        </div>
-      </div>
     </div>
   );
 };

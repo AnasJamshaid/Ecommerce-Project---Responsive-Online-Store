@@ -1,7 +1,6 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { FaCalendarAlt, FaComments} from "react-icons/fa";
+import { FaCalendarAlt, FaComments } from "react-icons/fa";
 import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
 import Sidebar from "../components/Sidebar";
@@ -52,105 +51,110 @@ const BlogPage = () => {
 
   return (
     <>
-    <div className="main-container">
-      {/* Header */}
-      <SecondHeader />
+      <div className="main-container">
+        {/* Header */}
+        <SecondHeader />
 
-      {/* Banner Section */}
-      <div
-        className="relative text-white h-72 bg-cover bg-center"
-        style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your banner image URL
-      >
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        {/* Banner Section */}
+        <div
+          className="relative text-white h-72 bg-cover bg-center"
+          style={{ backgroundImage: "url('/page-bg.jpg')" }} // Replace with your banner image URL
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
 
-        {/* Content */}
-        <div className="relative flex flex-col items-center justify-center h-full space-y-4">
-          <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
-          <Breadcrumb />
-        </div>
-      </div>
-
-      {/* Blog Posts Section */}
-      <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
-        {/* Blog Posts */}
-        <div className="lg:w-2/3 space-y-6">
-          {blogPosts.map((post, index) => (
-            <div
-              key={index}
-              className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
-            >
-              {/* Image */}
-              <Image
-                src={post.image}
-                alt={post.title}
-                width={871}
-                height={600} // Increased height of image
-                className="object-cover w-full h-80" // Increased height of image container
-              />
-
-              {/* Content */}
-              <div className="p-4 flex flex-col space-y-4">
-                {/* Metadata */}
-                <div className="flex items-center text-black text-sm space-x-4">
-                  <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                    <FaCalendarAlt size={14} className="mr-1" />
-                    {post.date}
-                  </span>
-                  <span className="text-black">/</span>
-                  <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                    <FaComments size={14} className="mr-1" />
-                    {post.comments} Comments
-                  </span>
-                  <span className="text-black">/</span>
-                  <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
-                    <PiUserCirclePlus size={14} className="mr-1" />
-                    {post.author}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <h2 className="text-2xl font-bold border-b-2 border-gray-300 pb-2 "style={{ fontFamily: "Helvetica, Arial, sans-serif" }}>{post.title}</h2>
-
-                {/* Description */}
-                <p className="text-gray-600 text-sm line-clamp-3 font-inter" style={{ fontFamily: "Inter, Arial, sans-serif" }}>
-                  {post.description}
-                </p>
-
-                {/* Read More */}
-                <Link
-                  href={post.link}
-                  className="self-start px-4 py-2 border border-[#FFA500] text-[#FFA500] rounded hover:bg-[#FFA500] hover:text-white flex items-center"
-                >
-                  Read More
-                  <span className="ml-2">
-                    <MdArrowOutward />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          ))}
-
-          {/* Pagination */}
-          <div className="flex justify-center space-x-2 mt-6">
-            {[1, 2, 3].map((page) => (
-              <button
-                key={page}
-                className="px-4 py-2 bg-gray-200 hover:bg-[#FFA500] rounded"
-              >
-                {page}
-              </button>
-            ))}
+          {/* Content */}
+          <div className="relative flex flex-col items-center justify-center h-full space-y-4">
+            <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
+            <Breadcrumb />
           </div>
         </div>
 
-        {/* Sidebar */}
-        <div className="flex">
-          <Sidebar />
+        {/* Blog Posts Section */}
+        <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
+          {/* Blog Posts */}
+          <div className="lg:w-2/3 space-y-6">
+            {blogPosts.map((post, index) => (
+              <div
+                key={index}
+                className="flex flex-col bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm"
+              >
+                {/* Image */}
+                <img
+                  src={post.image}
+                  alt={post.title}
+                  className="object-cover w-full h-80 rounded-t-lg"
+                />
+
+                {/* Content */}
+                <div className="p-4 flex flex-col space-y-4">
+                  {/* Metadata */}
+                  <div className="flex items-center text-black text-sm space-x-4">
+                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
+                      <FaCalendarAlt size={14} className="mr-1" />
+                      {post.date}
+                    </span>
+                    <span className="text-black">/</span>
+                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
+                      <FaComments size={14} className="mr-1" />
+                      {post.comments} Comments
+                    </span>
+                    <span className="text-black">/</span>
+                    <span className="flex items-center text-[#FFA500]"> {/* Orange icon color */}
+                      <PiUserCirclePlus size={14} className="mr-1" />
+                      {post.author}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <h2
+                    className="text-2xl font-bold border-b-2 border-gray-300 pb-2"
+                    style={{ fontFamily: "Helvetica, Arial, sans-serif" }}
+                  >
+                    {post.title}
+                  </h2>
+
+                  {/* Description */}
+                  <p
+                    className="text-gray-600 text-sm line-clamp-3 font-inter"
+                    style={{ fontFamily: "Inter, Arial, sans-serif" }}
+                  >
+                    {post.description}
+                  </p>
+
+                  {/* Read More */}
+                  <Link
+                    href={post.link}
+                    className="self-start px-4 py-2 border border-[#FFA500] text-[#FFA500] rounded hover:bg-[#FFA500] hover:text-white flex items-center"
+                  >
+                    Read More
+                    <span className="ml-2">
+                      <MdArrowOutward />
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            ))}
+
+            {/* Pagination */}
+            <div className="flex justify-center space-x-2 mt-6">
+              {[1, 2, 3].map((page) => (
+                <button
+                  key={page}
+                  className="px-4 py-2 bg-gray-200 hover:bg-[#FFA500] rounded"
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="flex">
+            <Sidebar />
+          </div>
         </div>
-        
-      </div>
-      <Footer/>
+        <Footer />
       </div>
     </>
   );
