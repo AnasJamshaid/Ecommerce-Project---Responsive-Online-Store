@@ -67,83 +67,29 @@ const BlogPost = ({ params }: { params: { slug: string } }) => {
   }, [params]); // Run effect on params change
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading message while data is fetching
-  }
-
-  if (!postData) {
-    return <div>No post found.</div>; // Handle the case when no post data is returned
-  }
-
-  // Debugging: Log imageUrl to see its structure
-  console.log("Post image URL:", postData.imageUrl);
-
-  // Generate the image URL using the helper function, if imageUrl is valid
-  const imageUrl = postData.imageUrl ;
-
-  console.log("Generated image URL:", imageUrl); // Debugging generated URL
-  const pageTitle = "Blog Details";
-
-  return (
-    <>
+    return (
       <div className="main-container">
         <SecondHeader />
         
         <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative flex flex-col items-center justify-center h-full space-y-4">
-            <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
+            <h1 className="text-4xl font-bold text-center font-helvetica">Blog Details</h1>
             <Breadcrumb />
           </div>
         </div>
 
         <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
-          {/* Main Content */}
+          {/* Main Content Skeleton Loader */}
           <div className="lg:w-2/3">
-            <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
-            <div className="text-sm text-gray-500 mb-4">
-              <span>{postData.author}</span> |{" "}
-              <span>{new Date(postData.date).toLocaleDateString()}</span> |{" "}
-              <span>{postData.comments} Comments</span>
+            <div className="animate-pulse">
+              <div className="bg-gray-300 h-12 w-3/4 mb-4"></div> {/* Title skeleton */}
+              <div className="bg-gray-300 h-6 w-1/4 mb-4"></div> {/* Author and date skeleton */}
+              <div className="bg-gray-300 h-64 mb-6"></div> {/* Image skeleton */}
+              <div className="bg-gray-300 h-8 w-1/4 mb-4"></div> {/* Tags skeleton */}
+              <div className="bg-gray-300 h-6 w-3/4 mb-4"></div> {/* Description skeleton */}
+              <div className="bg-gray-300 h-48 mb-8"></div> {/* Content skeleton */}
             </div>
-
-            {/* Image rendering with error handling */}
-            <Image
-              src={imageUrl} // Use the state variable for the image source
-              alt={postData.title}
-              className="w-full h-96 object-cover mb-6"
-              width={1200} // Set a width for the image
-              height={600} // Set a height for the image
-              onError={() => {
-                console.log("Image failed to load, setting fallback image");
-              }}
-            />
-
-            {/* Display tags if available */}
-            {postData.tags && postData.tags.length > 0 && (
-              <div className="mt-4 mb-8">
-                <h2 className="text-xl font-semibold">Tags:</h2>
-                <ul className="flex gap-2 flex-wrap">
-                  {postData.tags.map((tag, index) => (
-                    <li key={index} className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            <p className="text-lg text-gray-700 mb-8">{postData.description}</p>
-
-            {/* Render content if available */}
-            {postData.content && (
-              <div className="mt-8">
-                <h2 className="text-2xl font-semibold">Content</h2>
-                <div
-                  className="text-gray-800 mt-4"
-                  dangerouslySetInnerHTML={{ __html: postData.content }}
-                />
-              </div>
-            )}
           </div>
 
           {/* Sidebar */}
@@ -154,7 +100,92 @@ const BlogPost = ({ params }: { params: { slug: string } }) => {
 
         <Footer />
       </div>
-    </>
+    );
+  }
+
+  if (!postData) {
+    return <div>No post found.</div>; // Handle the case when no post data is returned
+  }
+
+  // Debugging: Log imageUrl to see its structure
+  console.log("Post image URL:", postData.imageUrl);
+
+  // Generate the image URL using the helper function, if imageUrl is valid
+  const imageUrl = postData.imageUrl ? urlFor(postData.imageUrl).toString() : "/fallback-image.jpg";
+
+  console.log("Generated image URL:", imageUrl); // Debugging generated URL
+  const pageTitle = "Blog Details";
+
+  return (
+    <div className="main-container">
+      <SecondHeader />
+      
+      <div className="relative text-white h-72 bg-cover bg-center" style={{ backgroundImage: "url('/page-bg.jpg')" }}>
+        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div className="relative flex flex-col items-center justify-center h-full space-y-4">
+          <h1 className="text-4xl font-bold text-center font-helvetica">{pageTitle}</h1>
+          <Breadcrumb />
+        </div>
+      </div>
+
+      <div className="container mx-auto py-12 px-4 flex flex-col lg:flex-row lg:space-x-8">
+        {/* Main Content */}
+        <div className="lg:w-2/3">
+          <h1 className="text-4xl font-bold mb-4">{postData.title}</h1>
+          <div className="text-sm text-gray-500 mb-4">
+            <span>{postData.author}</span> |{" "}
+            <span>{new Date(postData.date).toLocaleDateString()}</span> |{" "}
+            <span>{postData.comments} Comments</span>
+          </div>
+
+          {/* Image rendering with error handling */}
+          <Image
+            src={postData.imageUrl} // Use the state variable for the image source
+            alt={postData.title}
+            className="w-full h-96 object-cover mb-6"
+            width={1200} // Set a width for the image
+            height={600} // Set a height for the image
+            onError={() => {
+              console.log("Image failed to load, setting fallback image");
+            }}
+          />
+
+          {/* Display tags if available */}
+          {postData.tags && postData.tags.length > 0 && (
+            <div className="mt-4 mb-8">
+              <h2 className="text-xl font-semibold">Tags:</h2>
+              <ul className="flex gap-2 flex-wrap">
+                {postData.tags.map((tag, index) => (
+                  <li key={index} className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
+                    {tag}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <p className="text-lg text-gray-700 mb-8">{postData.description}</p>
+
+          {/* Render content if available */}
+          {postData.content && (
+            <div className="mt-8">
+              <h2 className="text-2xl font-semibold">Content</h2>
+              <div
+                className="text-gray-800 mt-4"
+                dangerouslySetInnerHTML={{ __html: postData.content }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar */}
+        <div className="lg:w-1/3 mt-8 lg:mt-0">
+          <Sidebar />
+        </div>
+      </div>
+
+      <Footer />
+    </div>
   );
 };
 
