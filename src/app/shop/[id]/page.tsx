@@ -98,7 +98,7 @@ const ProductDetail: React.FC = () => {
                     product?.gallery?.map((imgUrl, index) => (
                       <div
                         key={index}
-                        className={`w-16 h-16 rounded-lg overflow-hidden border cursor-pointer transition-all duration-300 hover:border-blue-500 ${selectedImage === imgUrl ? "border-blue-500" : "border-gray-300"}`}
+                        className={`w-16 h-16 rounded-lg overflow-hidden border cursor-pointer transition-all duration-300 hover:border-[#FF9F0D] ${selectedImage === imgUrl ? "border-blue-500" : "border-gray-300"}`}
                         onClick={() => handleThumbnailClick(imgUrl)}
                       >
                         <Image

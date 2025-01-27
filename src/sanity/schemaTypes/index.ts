@@ -4,5 +4,5 @@ import food from './foods';
 import blog from './blog';
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [food, chef, blog],
+  types: [food, chef, blog,],
 };
