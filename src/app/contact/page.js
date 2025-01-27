@@ -20,47 +20,36 @@ const ContactPage = () => {
     subject: "",
     message: "",
   });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     if (validateForm()) {
       try {
-        const response = await fetch('/api/sendemail', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
-  
-        console.log('Response Status:', response.status);
-        const text = await response.text();  // Get raw response text to inspect it
-  
-        console.log('Raw response:', text);
-  
-        if (!response.ok) {
-          try {
-            const errorData = JSON.parse(text);  // Try to parse the response as JSON
-            alert(`Error: ${errorData.message}`);
-          } catch (error) {
-            // If response is not JSON, display a fallback error message
-            alert('Failed to submit the form. Please try again.');
-          }
-          return;
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert("Your message has been sent successfully!");
+          setFormData({
+            name: "",
+            email: "",
+            subject: "",
+            message: "",
+          });
+        } else {
+          alert(`Error: ${result.message}`);
         }
-  
-        // If successful, parse the response as JSON
-        const result = JSON.parse(text);
-        alert(result.message);  // Show success message
       } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Failed to submit the form. Please try again.');
+        console.error("Error submitting form:", error);
+        alert("Failed to submit the form. Please try again.");
       }
     }
   };
-F  
-  
-  
-  
-  
 
   const validateForm = () => {
     let formIsValid = true;
