@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/Header.tsx", "src/app/components/Breadcrumb.js", "src/app/shop/page.js", "src/app/components/SecondHeader.js", "src/app/components/Testimonial.js", "src/app/shop/[id]/page.js", "src/app/shop/[id]/page.tsx", "src/app/components/ContactForm.js", "src/app/api/contact/route.js", "src/app/components/CartItem.js", "src/redux/store.js", "src/redux/reducers/cartReducer.js", "src/app/components/RightSideDetailsPage.tsx", "src/app/components/CartSlideIn.js", "src/app/blog/[slug]/page.js", "src/app/contact/page.js", "src/app/api/sendemail.js", "src/app/api/sendemail/route.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/components/Header.tsx", "src/app/components/Breadcrumb.js", "src/app/shop/page.js", "src/app/components/SecondHeader.js", "src/app/components/Testimonial.js", "src/app/shop/[id]/page.js", "src/app/shop/[id]/page.tsx", "src/app/components/ContactForm.js", "src/app/api/contact/route.js", "src/app/components/CartItem.js", "src/redux/store.js", "src/redux/reducers/cartReducer.js", "src/app/components/RightSideDetailsPage.tsx", "src/app/components/CartSlideIn.js", "src/app/blog/[slug]/page.js", "src/app/contact/page.tsx", "src/app/api/sendemail.js", "src/app/api/sendemail/route.js"],
   "exclude": ["node_modules"]
 }

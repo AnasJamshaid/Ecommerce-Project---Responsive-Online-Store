@@ -5,23 +5,38 @@ import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
 import { Footer } from "../components/Footer";
 
-const ContactPage = () => {
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+interface Errors {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+const ContactPage: React.FC = () => {
   const pageTitle = "Contact"; // Static title for the Contact page
-  const [formData, setFormData] = useState({
+
+  const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
 
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<Errors>({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       try {
@@ -51,9 +66,9 @@ const ContactPage = () => {
     }
   };
 
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     let formIsValid = true;
-    const newErrors = {};
+    const newErrors: Errors = { name: "", email: "", subject: "", message: "" };
 
     if (!formData.name) {
       formIsValid = false;
@@ -84,7 +99,7 @@ const ContactPage = () => {
     return formIsValid;
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
