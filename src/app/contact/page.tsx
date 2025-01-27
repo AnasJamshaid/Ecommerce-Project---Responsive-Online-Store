@@ -109,6 +109,7 @@ const ContactPage: React.FC = () => {
 
   return (
     <>
+    <div className="main-container">
       <SecondHeader />
       <div
         className="relative text-white h-72 bg-cover bg-center"
@@ -211,6 +212,7 @@ const ContactPage: React.FC = () => {
       </div>
 
       <Footer />
+      </div>
     </>
   );
 };
