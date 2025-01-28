@@ -18,12 +18,14 @@ const AddToCart = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [isCartVisible, setIsCartVisible] = useState(false);
+  const [loading, setLoading] = useState(true); // Loading state to manage skeleton loader
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     }
+    setLoading(false); // Cart loaded, so set loading to false
   }, []);
 
   const totalAmount = Object.values(cart).reduce(
@@ -75,7 +77,17 @@ const AddToCart = () => {
       </div>
 
       <div className="max-w-screen-xl mx-auto p-6 space-y-8 mt-16">
-        {Object.keys(cart).length === 0 ? (
+        {loading ? (
+          // Skeleton Loader
+          <div className="space-y-8">
+            <div className="animate-pulse space-y-4">
+              <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+              <div className="h-6 bg-gray-300 rounded w-full"></div>
+              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+            </div>
+          </div>
+        ) : Object.keys(cart).length === 0 ? (
           <div className="text-xl text-gray-600">Your cart is empty</div>
         ) : (
           <div className="space-y-8">
@@ -178,8 +190,6 @@ const AddToCart = () => {
           </div>
         )}
       </div>
-
-   
 
       {isCartVisible && (
         <CartSlideIn

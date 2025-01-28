@@ -13,6 +13,14 @@ export const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false); // State to control menu toggle
   const [searchPopupOpen, setSearchPopupOpen] = useState(false); // State to control search popup visibility
 
+
+  const [cartItems, setCartItems] = useState<number>(0); // Example state for cart items
+  const [isCartVisible, setIsCartVisible] = useState<boolean>(false); // Example state for showing cart
+
+  const handleClick = () => {
+    setIsCartVisible(!isCartVisible); // Toggle cart visibility
+  };
+  
   // Handle menu toggle
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
@@ -30,7 +38,7 @@ export const Header = () => {
       setMenuOpen(false);
     }
   };
-  
+
 
   return (
     <header className="top-0 left-0 w-full z-50 ">
@@ -53,9 +61,9 @@ export const Header = () => {
         {/* Shopping Bag Icon and Search Icon (visible on mobile) */}
         <div className="flex items-center space-x-4">
           <HiMiniShoppingBag className="text-white -mt-1" size={19} />
-          <LuSearch 
+          <LuSearch
             className="text-white -mt-1"
-            size={19} 
+            size={19}
             onClick={toggleSearchPopup} // Toggle the search popup when clicked
           />
         </div>
@@ -122,7 +130,12 @@ export const Header = () => {
           </div>
 
           {/* Shopping Bag Icon */}
-          <HiMiniShoppingBag className="text-white" size={23} />
+          <a href="/addtocart" className="relative">
+        <HiMiniShoppingBag
+          className="text-white hover:text-[#FF9F0D] cursor-pointer"
+          size={23}
+        />
+      </a>
         </div>
       </div>
     </header>
