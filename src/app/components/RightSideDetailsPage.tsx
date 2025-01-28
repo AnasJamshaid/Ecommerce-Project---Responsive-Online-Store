@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from "react";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { PiGitDiffBold } from "react-icons/pi";
@@ -32,6 +34,7 @@ const RightSideDetailsPage: React.FC = () => {
 
     const [cart, setCart] = useState<{ [key: string]: { product: FoodItem; quantity: number } }>({});
     const [isCartVisible, setIsCartVisible] = useState(false);
+
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -238,6 +241,7 @@ const RightSideDetailsPage: React.FC = () => {
                     <FaYoutube size={19} className="cursor-pointer" />
                 </div>
             </div>
+            
         </div>
     );
 };

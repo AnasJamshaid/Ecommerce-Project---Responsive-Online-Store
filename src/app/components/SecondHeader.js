@@ -10,11 +10,17 @@ import Link from "next/link";
 const SecondHeader = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false); // State for mobile menu
+  const [cartItems, setCartItems] = useState(0); // Cart item count
+
+  const handleClick = () => {
+    // Navigate to the addtocart page using window.location
+    window.location.href = "/addtocart"; 
+  };
 
   const isActive = (path) => pathname === path;
 
   return (
-    <header className="bg-black text-white py-4 fixed top-0 left-0 w-full main-conatiner z-50 shadow-md " >
+    <header className="bg-black text-white py-4 fixed top-0 left-0 w-full main-conatiner z-50 shadow-md ">
       <div className="max-w-screen-xl mx-auto flex justify-between items-center px-4">
         {/* Logo */}
         <div className="text-2xl font-bold">
@@ -79,8 +85,14 @@ const SecondHeader = () => {
           <button className="hover:text-[#FF9F0D]">
             <FaUser />
           </button>
-          <button className="hover:text-[#FF9F0D]">
+          <button className="relative hover:text-[#FF9F0D]" onClick={handleClick}>
             <FaShoppingCart />
+            {/* Cart Items Badge */}
+            {cartItems > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full px-2 py-1">
+                {cartItems}
+              </span>
+            )}
           </button>
         </div>
       </div>
