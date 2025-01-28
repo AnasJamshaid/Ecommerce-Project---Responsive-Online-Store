@@ -5,6 +5,7 @@ import Breadcrumb from "../components/Breadcrumb";
 import SecondHeader from "../components/SecondHeader";
 import { Footer } from "../components/Footer";
 import CartSlideIn from "../components/CartSlideIn";
+import Link from "next/link";
 
 interface FoodItem {
   id: string;
@@ -182,9 +183,11 @@ const AddToCart = () => {
                   <span className="text-gray-800">Total Amount:</span>
                   <span className="text-gray-800">${finalTotal.toFixed(2)}</span>
                 </div>
-                <button className="w-full mt-6 py-3 bg-[#FF9F0D] text-white rounded-lg hover:bg-[#FF9F0D]">
-                  Proceed to Checkout
-                </button>
+                <Link href="/checkout">
+                  <button className="w-full mt-6 py-3 bg-[#FF9F0D] text-white rounded-lg hover:bg-[#FF9F0D]">
+                    Proceed to Checkout
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
