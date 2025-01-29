@@ -6,7 +6,7 @@ import SecondHeader from "../components/SecondHeader";
 import { Footer } from "../components/Footer";
 import CartSlideIn from "../components/CartSlideIn";
 import Link from "next/link";
-import Image from "next/image"; // Using Next.js Image for optimization
+import Image from "next/image";
 
 interface FoodItem {
   id: string;
@@ -20,25 +20,22 @@ const AddToCart = () => {
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [isCartVisible, setIsCartVisible] = useState(false);
-  const [loading, setLoading] = useState(true); // Loading state to manage skeleton loader
-
-  
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
       try {
-        setCart(JSON.parse(savedCart)); // Load cart properly
+        setCart(JSON.parse(savedCart));
       } catch (error) {
         console.error("Error parsing cart data:", error);
       }
     }
     setLoading(false);
   }, []);
-  
+
   const totalAmount = Object.values(cart).reduce(
     (acc, { product, quantity }) => {
-      // Ensure product and product.price are defined before accessing
       const productPrice = product?.price ? parseFloat(product.price) : 0;
       return acc + productPrice * quantity;
     },
@@ -90,29 +87,25 @@ const AddToCart = () => {
 
       <div className="max-w-screen-xl mx-auto p-6 space-y-8 mt-16">
         {loading ? (
-          // Skeleton Loader
-          <div className="space-y-8">
-            <div className="animate-pulse space-y-4">
-              <div className="h-6 bg-gray-300 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-              <div className="h-6 bg-gray-300 rounded w-full"></div>
-              <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-            </div>
+          <div className="space-y-8 animate-pulse">
+            <div className="h-6 bg-gray-300 rounded w-3/4"></div>
+            <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+            <div className="h-6 bg-gray-300 rounded w-full"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
           </div>
         ) : Object.keys(cart).length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-64  p-6">
-            <p className="text-4xl text-black font-semibold font-helvetica">Your cart is Empty</p>
-            <p className="text-black text-sm font-inter mt-2">Looks like you haven't added anything yet.</p>
-            <Link href="/shop" className="mt-4 px-6 py-2 bg-[#FF9F0D] text-white text-lg font-inter font-medium rounded-lg shadow hover:bg-[#FF9F0D] transition duration-300">
+          <div className="flex flex-col items-center justify-center h-64 p-6">
+            <p className="text-4xl text-black font-semibold">Your cart is Empty</p>
+            <p className="text-black text-sm mt-2">Looks like you haven't added anything yet.</p>
+            <Link href="/shop" className="mt-4 px-6 py-2 bg-[#FF9F0D] text-white rounded-lg hover:bg-[#FF9F0D] transition duration-300">
               Go to Shop
             </Link>
           </div>
         ) : (
           <div className="space-y-8">
-            {/* Cart Table */}
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-gray-100">
+            <table className="w-full text-left border-collapse shadow-md">
+              <thead className="bg-gray-100">
+                <tr>
                   <th className="p-4 text-gray-800">Product</th>
                   <th className="p-4 text-gray-800">Price</th>
                   <th className="p-4 text-gray-800">Quantity</th>
@@ -124,7 +117,6 @@ const AddToCart = () => {
                 {Object.entries(cart).map(([id, { product, quantity }]) => (
                   <tr key={id} className="border-b">
                     <td className="p-4 flex items-center space-x-4">
-                      {/* Fixed size container for image */}
                       <div className="w-16 h-16 overflow-hidden rounded-lg">
                         <Image
                           src={product?.image || "/default-image.jpg"}
@@ -136,7 +128,6 @@ const AddToCart = () => {
                       </div>
                       <span className="text-gray-800 font-semibold">{product?.name || "Unknown Product"}</span>
                     </td>
-
                     <td className="p-4 text-gray-800">${parseFloat(product?.price || "0").toFixed(2)}</td>
                     <td className="p-4">
                       <div className="flex items-center space-x-2">
@@ -167,7 +158,6 @@ const AddToCart = () => {
               </tbody>
             </table>
 
-            {/* Coupon Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
               <div className="col-span-2">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Coupon Code</h3>
@@ -190,39 +180,41 @@ const AddToCart = () => {
                   <div className="mt-4 text-green-600">Coupon applied: -${discount.toFixed(2)}</div>
                 )}
               </div>
+              <div className="bg-white p-6 rounded-lg shadow-lg space-y-6 border border-gray-200">
+                <h3 className="text-2xl font-semibold text-gray-800 mb-6">Total Bill</h3>
 
-              {/* Total Calculation */}
-              <div className="bg-gray-50 p-6 rounded-lg shadow-lg">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Total Bill</h3>
-                <div className="flex justify-between mb-4">
-                  <span className="text-gray-600">Cart Subtotal:</span>
-                  <span className="text-gray-800 font-medium">${totalAmount.toFixed(2)}</span>
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-gray-600 text-sm">Cart Subtotal:</span>
+                  <span className="text-gray-800 font-semibold text-lg">${totalAmount.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between mb-4">
-                  <span className="text-gray-600">Shipping Charge:</span>
-                  <span className="text-gray-800 font-medium">${shippingCharge.toFixed(2)}</span>
+
+                <div className="flex justify-between items-center mb-4">
+                  <span className="text-gray-600 text-sm">Shipping Charge:</span>
+                  <span className="text-gray-800 font-semibold text-lg">${shippingCharge.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between font-semibold text-lg">
+
+                <div className="flex justify-between items-center font-semibold text-lg mt-4 border-t-2 pt-4 border-gray-200">
                   <span className="text-gray-800">Total Amount:</span>
                   <span className="text-gray-800">${finalTotal.toFixed(2)}</span>
                 </div>
+
+                <div className="mt-8 float-right">
+                  <Link
+                    href="/checkout"
+                    className="w-full px-6 py-3 bg-[#FF9F0D] text-white text-lg font-semibold rounded-lg hover:bg-[#FF7F0D] transition duration-300"
+                  >
+                    Proceed to Checkout
+                  </Link>
+                </div>
               </div>
+
             </div>
 
-            {/* Checkout Button */}
-            <div className="mt-8">
-              <Link
-                href="/checkout"
-                className="px-6 py-3 bg-[#FF9F0D] text-white text-lg font-semibold rounded-lg hover:bg-[#FF9F0D] transition duration-300"
-              >
-                Proceed to Checkout
-              </Link>
-            </div>
+
           </div>
         )}
       </div>
 
-      {/* Cart Slide In */}
       {isCartVisible && (
         <CartSlideIn
           cart={cart}
