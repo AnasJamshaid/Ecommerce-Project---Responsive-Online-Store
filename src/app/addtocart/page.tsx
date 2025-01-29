@@ -6,6 +6,7 @@ import SecondHeader from "../components/SecondHeader";
 import { Footer } from "../components/Footer";
 import CartSlideIn from "../components/CartSlideIn";
 import Link from "next/link";
+import Image from "next/image"; // Using Next.js Image for optimization
 
 interface FoodItem {
   id: string;
@@ -21,16 +22,26 @@ const AddToCart = () => {
   const [isCartVisible, setIsCartVisible] = useState(false);
   const [loading, setLoading] = useState(true); // Loading state to manage skeleton loader
 
+  
+
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      try {
+        setCart(JSON.parse(savedCart)); // Load cart properly
+      } catch (error) {
+        console.error("Error parsing cart data:", error);
+      }
     }
-    setLoading(false); // Cart loaded, so set loading to false
+    setLoading(false);
   }, []);
-
+  
   const totalAmount = Object.values(cart).reduce(
-    (acc, { product, quantity }) => acc + parseFloat(product.price) * quantity,
+    (acc, { product, quantity }) => {
+      // Ensure product and product.price are defined before accessing
+      const productPrice = product?.price ? parseFloat(product.price) : 0;
+      return acc + productPrice * quantity;
+    },
     0
   );
 
@@ -89,7 +100,13 @@ const AddToCart = () => {
             </div>
           </div>
         ) : Object.keys(cart).length === 0 ? (
-          <div className="text-xl text-gray-600">Your cart is empty</div>
+          <div className="flex flex-col items-center justify-center h-64  p-6">
+            <p className="text-4xl text-black font-semibold font-helvetica">Your cart is Empty</p>
+            <p className="text-black text-sm font-inter mt-2">Looks like you haven't added anything yet.</p>
+            <Link href="/shop" className="mt-4 px-6 py-2 bg-[#FF9F0D] text-white text-lg font-inter font-medium rounded-lg shadow hover:bg-[#FF9F0D] transition duration-300">
+              Go to Shop
+            </Link>
+          </div>
         ) : (
           <div className="space-y-8">
             {/* Cart Table */}
@@ -107,14 +124,20 @@ const AddToCart = () => {
                 {Object.entries(cart).map(([id, { product, quantity }]) => (
                   <tr key={id} className="border-b">
                     <td className="p-4 flex items-center space-x-4">
-                      <img
-                        src={product.image || "/default-image.jpg"}
-                        alt={product.name}
-                        className="w-16 h-16 object-cover rounded-lg"
-                      />
-                      <span className="text-gray-800 font-semibold">{product.name}</span>
+                      {/* Fixed size container for image */}
+                      <div className="w-16 h-16 overflow-hidden rounded-lg">
+                        <Image
+                          src={product?.image || "/default-image.jpg"}
+                          alt={product?.name || "Product Image"}
+                          width={64}
+                          height={64}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <span className="text-gray-800 font-semibold">{product?.name || "Unknown Product"}</span>
                     </td>
-                    <td className="p-4 text-gray-800">${parseFloat(product.price).toFixed(2)}</td>
+
+                    <td className="p-4 text-gray-800">${parseFloat(product?.price || "0").toFixed(2)}</td>
                     <td className="p-4">
                       <div className="flex items-center space-x-2">
                         <button
@@ -133,7 +156,7 @@ const AddToCart = () => {
                         </button>
                       </div>
                     </td>
-                    <td className="p-4 text-gray-800 font-medium">${(parseFloat(product.price) * quantity).toFixed(2)}</td>
+                    <td className="p-4 text-gray-800 font-medium">${(parseFloat(product?.price || "0") * quantity).toFixed(2)}</td>
                     <td className="p-4">
                       <button onClick={() => handleRemoveItem(id)} className="text-red-600 hover:text-red-800">
                         ✕
@@ -183,17 +206,23 @@ const AddToCart = () => {
                   <span className="text-gray-800">Total Amount:</span>
                   <span className="text-gray-800">${finalTotal.toFixed(2)}</span>
                 </div>
-                <Link href="/checkout">
-                  <button className="w-full mt-6 py-3 bg-[#FF9F0D] text-white rounded-lg hover:bg-[#FF9F0D]">
-                    Proceed to Checkout
-                  </button>
-                </Link>
               </div>
+            </div>
+
+            {/* Checkout Button */}
+            <div className="mt-8">
+              <Link
+                href="/checkout"
+                className="px-6 py-3 bg-[#FF9F0D] text-white text-lg font-semibold rounded-lg hover:bg-[#FF9F0D] transition duration-300"
+              >
+                Proceed to Checkout
+              </Link>
             </div>
           </div>
         )}
       </div>
 
+      {/* Cart Slide In */}
       {isCartVisible && (
         <CartSlideIn
           cart={cart}
@@ -202,7 +231,6 @@ const AddToCart = () => {
           updateCart={setCart as any}
         />
       )}
-
       <Footer />
     </div>
   );

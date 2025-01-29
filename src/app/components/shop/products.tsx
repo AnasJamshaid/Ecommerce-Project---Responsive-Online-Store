@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // Use next/navigation for navigation
+import { useRouter } from "next/navigation";
 import { PiGitDiffBold } from "react-icons/pi";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import { CiHeart } from "react-icons/ci";
@@ -20,7 +20,7 @@ type FoodItem = {
 const ProductCard: React.FC = () => {
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter(); // Router for navigation
+  const router = useRouter();
 
   // Fetch food data on component mount
   useEffect(() => {
@@ -39,33 +39,22 @@ const ProductCard: React.FC = () => {
 
   const addtocart = (food: FoodItem) => {
     try {
-      // Retrieve the cart from localStorage or initialize as an empty array
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      let cart = JSON.parse(localStorage.getItem("cart") || "{}");
   
-      // Ensure cart is an array
-      if (!Array.isArray(cart)) {
-        console.error("Cart is not an array. Resetting cart.");
-        localStorage.setItem("cart", JSON.stringify([]));
-        return;
+      if (typeof cart !== "object" || Array.isArray(cart)) {
+        console.error("Cart is not an object. Resetting cart.");
+        cart = {};
       }
   
-      // Check if the food item already exists in the cart
-      const existingFood = cart.find((item: FoodItem) => item._id === food._id);
-  
-      if (existingFood) {
-        // If the food item already exists, update its quantity
-        existingFood.quantity += 1;
+      // Check if the product already exists
+      if (cart[food._id]) {
+        cart[food._id].quantity += 1;
       } else {
-        // If the food item does not exist, add it to the cart with quantity 1
-        const newFood = { ...food, quantity: 1 };
-        cart.push(newFood);
+        cart[food._id] = { product: food, quantity: 1 }; // Store full product data
       }
   
-      // Update the cart in localStorage
       localStorage.setItem("cart", JSON.stringify(cart));
-  
-      // Redirect to the Add to Cart page
-      router.push("/addtocart");
+      router.push("/addtocart"); // Redirect to cart
     } catch (error) {
       console.error("Error adding to cart:", error);
     }
@@ -110,7 +99,10 @@ const ProductCard: React.FC = () => {
 
                       {/* Add to Cart Icon */}
                       <button
-                        onClick={() => addtocart(food)}
+                        onClick={(e) => {
+                          e.stopPropagation(); // Prevents navigating to the product page
+                          addtocart(food);
+                        }}
                         className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full"
                       >
                         <MdOutlineShoppingBag size={24} />
@@ -127,7 +119,7 @@ const ProductCard: React.FC = () => {
                 </div>
 
                 {/* Product Details */}
-                <h3 className="font-semibold text-lg text-gray-800 mt-4">
+                <h3 className="font-semibold text-lg text-gray-800 mt-4 group-hover:text-[#FF9F0D] transition-all">
                   {food.name}
                 </h3>
                 <div className="flex items-center space-x-2 mt-2">

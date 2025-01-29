@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from "react";
+import React from "react";
 
 interface FoodItem {
   name: string;
@@ -17,7 +15,12 @@ interface CartSlideInProps {
 
 const CartSlideIn: React.FC<CartSlideInProps> = ({ cart, setIsCartVisible, onCheckout, updateCart }) => {
   const totalAmount = Object.values(cart).reduce(
-    (acc, { product, quantity }) => acc + parseFloat(product.price) * quantity,
+    (acc, { product, quantity }) => {
+      if (product && product.price) {
+        return acc + parseFloat(product.price) * quantity;
+      }
+      return acc; // If product or price is missing, skip this item
+    },
     0
   );
 
@@ -62,17 +65,18 @@ const CartSlideIn: React.FC<CartSlideInProps> = ({ cart, setIsCartVisible, onChe
           <div className="overflow-y-auto flex-1">
             {Object.entries(cart).map(([id, { product, quantity }]) => (
               <div key={id} className="flex items-center mb-4 border-b border-gray-200 pb-4">
+                {/* Image might be null or undefined, using optional chaining */}
                 <img
-                  src={product.image || ""}
-                  alt={product.name}
+                  src={product?.image || ""}
+                  alt={product?.name || "Product"}
                   className="w-20 h-20 object-cover rounded-md"
                 />
                 <div className="ml-4 flex-1">
-                  <p className="font-medium text-gray-800">{product.name}</p>
-                  <p className="text-sm text-gray-600">{quantity} x ${parseFloat(product.price).toFixed(2)}</p>
+                  <p className="font-medium text-gray-800">{product?.name}</p>
+                  <p className="text-sm text-gray-600">{quantity} x ${parseFloat(product?.price || "0").toFixed(2)}</p>
                 </div>
                 <p className="text-lg font-semibold text-gray-800">
-                  ${(parseFloat(product.price) * quantity).toFixed(2)}
+                  ${(parseFloat(product?.price || "0") * quantity).toFixed(2)}
                 </p>
                 <div className="ml-4 flex flex-col items-center">
                   <button
