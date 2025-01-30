@@ -8,6 +8,8 @@ import { LuSearch } from "react-icons/lu";
 import { GiHamburgerMenu } from "react-icons/gi"; // Import hamburger icon for mobile
 import { IoClose } from "react-icons/io5"; // Close button for the menu
 import { MobileHeader } from "./MobileHeader";
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { FaUserCircle } from "react-icons/fa";
 
 export const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false); // State to control menu toggle
@@ -129,6 +131,19 @@ export const Header = () => {
             <LuSearch className="text-white" size={24} />
           </div>
 
+          <SignedOut>
+            <SignInButton>
+              <button
+                className="text-gray-600 hover:text-gray-800"
+                aria-label="Sign In"
+              >
+                <FaUserCircle className="text-white" size={24} />
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
           {/* Shopping Bag Icon */}
           <a href="/addtocart" className="relative">
         <HiMiniShoppingBag

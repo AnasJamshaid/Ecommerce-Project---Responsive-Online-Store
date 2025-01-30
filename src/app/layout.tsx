@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./style/globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ClerkProvider } from "@clerk/nextjs";
 
 
 
@@ -16,15 +17,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
-    <html lang="en">
-      <body>
-        
-        {children}
-        <Analytics />
-        <SpeedInsights />
+    <ClerkProvider>
+
+      <html lang="en">
+        <body>
+
+          {children}
+          <Analytics />
+          <SpeedInsights />
         </body>
-        
-    </html>
+
+      </html>
+    </ClerkProvider>
   );
 }

@@ -6,7 +6,7 @@ import { FaUser, FaShoppingCart } from "react-icons/fa"; // User & Cart Icons
 import { HiMenuAlt3, HiX } from "react-icons/hi"; // Hamburger and Close Icons
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-
+import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 const SecondHeader = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false); // State for mobile menu
@@ -14,7 +14,7 @@ const SecondHeader = () => {
 
   const handleClick = () => {
     // Navigate to the addtocart page using window.location
-    window.location.href = "/addtocart"; 
+    window.location.href = "/addtocart";
   };
 
   const isActive = (path) => pathname === path;
@@ -82,10 +82,11 @@ const SecondHeader = () => {
           <button className="hover:text-[#FF9F0D]">
             <FiSearch />
           </button>
-          <button className="hover:text-[#FF9F0D]">
-            <FaUser />
-          </button>
-          <button className="relative hover:text-[#FF9F0D]" onClick={handleClick}>
+
+          <button
+            className="relative hover:text-[#FF9F0D]"
+            onClick={handleClick}
+          >
             <FaShoppingCart />
             {/* Cart Items Badge */}
             {cartItems > 0 && (
@@ -94,6 +95,19 @@ const SecondHeader = () => {
               </span>
             )}
           </button>
+          <SignedOut>
+            <SignInButton>
+              <button
+                className="text-gray-600 hover:text-gray-800"
+                aria-label="Sign In"
+              >
+                <FaUser />
+              </button>
+            </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </div>
       </div>
     </header>
