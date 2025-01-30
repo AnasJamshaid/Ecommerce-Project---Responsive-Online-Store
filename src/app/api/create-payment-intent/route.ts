@@ -1,44 +1,52 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Initialize Stripe with the correct API version
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2022-11-15', // Use the stable API version
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+  apiVersion: '2022-11-15',
 });
 
-export async function POST(request: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { amount, paymentMethodId } = await request.json();
-    console.log('Received request with:', { amount, paymentMethodId });
+    const body = await req.json();
+    const { amount, paymentMethodId } = body;
 
-    // Validate the amount
-    if (typeof amount !== 'number' || amount <= 0) {
-      throw new Error('Invalid amount');
+    if (!amount || typeof amount !== 'number') {
+      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
+    }
+
+    if (!paymentMethodId) {
+      return NextResponse.json({ error: 'Payment method ID is required' }, { status: 400 });
     }
 
     // Create a PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount, // Amount in cents
+      amount: amount * 100, // Convert to cents
       currency: 'usd',
       payment_method: paymentMethodId,
       confirmation_method: 'manual',
       confirm: true,
-      automatic_payment_methods: {
-        enabled: true,
-        allow_redirects: 'never',
-      },
     });
 
-    console.log('PaymentIntent created:', paymentIntent.id);
+    // If the payment requires additional action (e.g., 3D Secure), return the client secret
+    if (paymentIntent.status === 'requires_action') {
+      return NextResponse.json(
+        { clientSecret: paymentIntent.client_secret, requiresAction: true },
+        { status: 200 }
+      );
+    }
 
-    return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-    });
+    // If the payment is successful, return the client secret
+    if (paymentIntent.status === 'succeeded') {
+      return NextResponse.json(
+        { clientSecret: paymentIntent.client_secret, success: true },
+        { status: 200 }
+      );
+    }
+
+    // Handle other cases
+    return NextResponse.json({ error: 'Payment failed' }, { status: 400 });
   } catch (error: any) {
-    console.error('Error creating PaymentIntent:', error);
-    return NextResponse.json(
-      { error: error.message || 'Failed to create PaymentIntent' },
-      { status: 500 }
-    );
+    console.error('Stripe Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

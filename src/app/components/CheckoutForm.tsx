@@ -48,6 +48,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, totalAmount, discount
       return;
     }
   
+    // Step 1: Create a PaymentMethod
     const { error: paymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card: cardElement,
@@ -70,11 +71,8 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, totalAmount, discount
   
     try {
       const amountInCents = Math.round(finalTotal * 100); // Convert to cents
-      console.log('Sending request with:', {
-        amount: amountInCents,
-        paymentMethodId: paymentMethod.id,
-      });
   
+      // Step 2: Call your API to create a PaymentIntent
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
         headers: {
@@ -92,23 +90,23 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({ cart, totalAmount, discount
         throw new Error(errorResponse.error || 'Failed to create PaymentIntent');
       }
   
-      const { clientSecret } = await response.json();
+      const { clientSecret, requiresAction } = await response.json();
   
-      const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: paymentMethod.id,
-      });
-  
-      if (confirmError) {
-        setError(confirmError.message || 'An error occurred during payment confirmation');
-        setLoading(false);
-        return;
+      // Step 3: Confirm the PaymentIntent
+      if (requiresAction) {
+        const { error: confirmError } = await stripe.confirmCardPayment(clientSecret);
+        if (confirmError) {
+          setError(confirmError.message || 'An error occurred during payment confirmation');
+          setLoading(false);
+          return;
+        }
       }
   
       // Payment successful
       toast.success('Payment successful!');
-      router.push('/thank-you'); // Redirect to the thank you page
+      router.push('/success'); // Redirect to the success page
     } catch (err: any) {
-      setError(err.message || 'Failed to create PaymentIntent');
+      setError(err.message || 'Failed to process payment');
     } finally {
       setLoading(false);
     }
