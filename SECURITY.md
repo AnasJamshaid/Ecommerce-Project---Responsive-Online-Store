@@ -2,6 +2,10 @@
 
 ## Supported Versions
 
+All rights reserved.  
+Unauthorized use, copying, modification, distribution, or reproduction of this code is strictly prohibited.  
+Contact the owner for permissions.
+
 Use this section to tell people about which versions of your project are
 currently being supported with security updates.
 
