@@ -10,8 +10,6 @@ import { toast } from "react-hot-toast";
 import Image from "next/image";
 import { useState } from "react";
 import { Footer } from "./Footer";
-import SecondHeader from "./SecondHeader";
-import Breadcrumb from "./Breadcrumb";
 
 interface CheckoutFormProps {
   cart: { [key: string]: { product: any; quantity: number } };
@@ -105,19 +103,7 @@ const CheckoutForm: React.FC<CheckoutFormProps> = ({
 
   return (
     <div className="main-container">
-      <SecondHeader />
-      <div
-        className="relative text-white h-72 bg-cover bg-center"
-        style={{ backgroundImage: "url('/page-bg.jpg')" }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-50"></div>
-        <div className="relative flex flex-col items-center justify-center h-full space-y-4">
-          <h1 className="text-4xl font-bold text-center font-helvetica">
-            Check Out
-          </h1>
-          <Breadcrumb />
-        </div>
-      </div>
+     
 
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
