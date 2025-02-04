@@ -14,13 +14,12 @@ interface UserData {
   profileImageUrl: string | null;
 }
 
-export const UserDataPage: React.FC = () => {
+const UserDataPage: React.FC = () => {
   const { user } = useUser();
   const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
     if (user) {
-      console.log("User object:", user);
       const clerkUserData: UserData = {
         id: user.id,
         firstName: user.firstName,

@@ -1,4 +1,3 @@
-// components/shop/products.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -16,30 +15,32 @@ type FoodItem = {
     price: string;
     originalPrice?: string;
     image: string;
-    category?: string; // Assuming your food item has a 'category' property
+    category?: string;
     tags?: string[];
 };
 
 interface ProductCardProps {
     searchTerm: string;
     selectedCategories: string[];
-    onFoodsLoaded: (foods: FoodItem[]) => void;  // Add this prop
+    onFoodsLoaded: (foods: FoodItem[]) => void;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategories, onFoodsLoaded }) => {
     const [foods, setFoods] = useState<FoodItem[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [error, setError] = useState<string | null>(null);  // Error state
     const router = useRouter();
 
-    // Fetch food data on component mount
+    // Fetch food data with error handling
     useEffect(() => {
         const fetchFoods = async () => {
             try {
                 const data = await getFoodData();
                 setFoods(data);
-                onFoodsLoaded(data);  // Call the callback
+                onFoodsLoaded(data);
             } catch (error) {
                 console.error("Error fetching food data:", error);
+                setError("There was an issue fetching the food data. Please try again later.");
             } finally {
                 setLoading(false);
             }
@@ -56,22 +57,26 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
                 cart = {};
             }
 
-            // Check if the product already exists
             if (cart[food._id]) {
                 cart[food._id].quantity += 1;
             } else {
-                cart[food._id] = { product: food, quantity: 1 }; // Store full product data
+                cart[food._id] = { product: food, quantity: 1 };
             }
 
             localStorage.setItem("cart", JSON.stringify(cart));
-            router.push("/addtocart"); // Redirect to cart
+            router.push("/addtocart");
         } catch (error) {
             console.error("Error adding to cart:", error);
+            setError("There was an issue adding the product to the cart. Please try again.");
         }
     };
 
     if (loading) {
         return <div>Loading products...</div>;
+    }
+
+    if (error) {
+        return <div className="text-red-500">{error}</div>;  // Display error message
     }
 
     if (foods.length === 0) {
@@ -80,8 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
 
     const filteredFoods = foods.filter(food => {
         const searchTermMatch = food.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(food.category || ""); //Handles cases where food.category might be null or undefined
-
+        const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(food.category || "");
 
         return searchTermMatch && categoryMatch;
     });
@@ -95,9 +99,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
                             <div
                                 className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 group relative cursor-pointer"
                                 key={food._id}
-                                onClick={() => router.push(`/shop/${food._id}`)} // Navigate to the product detail page
+                                onClick={() => router.push(`/shop/${food._id}`)}
                             >
-                                {/* Product Image */}
                                 <div className="relative">
                                     <Image
                                         src={food.image}
@@ -108,17 +111,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
                                     />
                                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
                                         <div className="flex space-x-4">
-                                            {/* Product Comparison Icon Link */}
                                             <Link href={`/compare/${food._id}`}>
                                                 <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
                                                     <PiGitDiffBold size={24} />
                                                 </button>
                                             </Link>
 
-                                            {/* Add to Cart Icon */}
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // Prevents navigating to the product page
+                                                    e.stopPropagation();
                                                     addtocart(food);
                                                 }}
                                                 className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full"
@@ -126,7 +127,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
                                                 <MdOutlineShoppingBag size={24} />
                                             </button>
 
-                                            {/* Add to Wishlist Icon Link */}
                                             <Link href={`/wishlist/add/${food._id}`}>
                                                 <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
                                                     <CiHeart size={24} />
@@ -136,7 +136,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ searchTerm, selectedCategorie
                                     </div>
                                 </div>
 
-                                {/* Product Details */}
                                 <h3 className="font-semibold text-lg text-gray-800 mt-4 group-hover:text-[#FF9F0D] transition-all">
                                     {food.name}
                                 </h3>
