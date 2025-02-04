@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { getFoodData } from "@/sanity/dataFetching"; // Adjust import path
 import Image from "next/image";
-import { PiGitDiffBold } from "react-icons/pi";
 import { MdOutlineShoppingBag } from "react-icons/md";
-import { CiHeart } from "react-icons/ci";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa"; // Import arrow icons
-import Link from "next/link"; // Import Link component for navigation
+import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface FoodItem {
   _id: string;
@@ -16,23 +15,23 @@ interface FoodItem {
   categories: string[];
 }
 
-const SimilarProducts: React.FC<{ currentProductId: string; onProductClick: (id: string) => void }> = ({
+const SimilarProducts: React.FC<{ currentProductId: string }> = ({
   currentProductId,
-  onProductClick,
 }) => {
   const [products, setProducts] = useState<FoodItem[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0); // Track current item index
+  const containerRef = useRef<HTMLDivElement>(null); // Ref for the container
+  const [isMobileView, setIsMobileView] = useState(false);
+  const router = useRouter();
+
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const allProducts = await getFoodData();
-
-        // Exclude the current product from the list
         const filteredProducts = allProducts.filter(
           (product: FoodItem) => product._id !== currentProductId
         );
-
         setProducts(filteredProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -40,97 +39,152 @@ const SimilarProducts: React.FC<{ currentProductId: string; onProductClick: (id:
     };
 
     fetchProducts();
+
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth < 768);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [currentProductId]);
 
+  const productsToShow = isMobileView ? 1 : 4;
+
+  const addtocart = (food: FoodItem) => {
+    try {
+        let cart = JSON.parse(localStorage.getItem("cart") || "{}");
+
+        if (typeof cart !== "object" || Array.isArray(cart)) {
+            console.error("Cart is not an object. Resetting cart.");
+            cart = {};
+        }
+
+        // Check if the product already exists
+        if (cart[food._id]) {
+            cart[food._id].quantity += 1;
+        } else {
+            cart[food._id] = { product: food, quantity: 1 }; // Store full product data
+        }
+
+        localStorage.setItem("cart", JSON.stringify(cart));
+        router.push("/addtocart"); // Redirect to cart
+    } catch (error) {
+        console.error("Error adding to cart:", error);
+    }
+};
+
+
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 4) % products.length);
+    setCurrentIndex((prev) => Math.min(prev + 1, products.length - productsToShow));
+    if (containerRef.current) {
+        const itemWidth = containerRef.current.offsetWidth / productsToShow;
+        containerRef.current.scrollLeft += itemWidth;
+    }
+
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 4 + products.length) % products.length);
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    if (containerRef.current) {
+        const itemWidth = containerRef.current.offsetWidth / productsToShow;
+        containerRef.current.scrollLeft -= itemWidth;
+    }
   };
 
   if (products.length === 0) {
-    return <p className="text-center text-gray-600">No similar products found.</p>;
+    return (
+      <p className="text-center text-gray-600">No similar products found.</p>
+    );
   }
 
   return (
-    <div className="relative w-full ">
-      {/* Heading with Arrow Navigation */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-gray-800"style={{ fontFamily: "Helvetica, Arial, sans-serif" }}>Similar Products</h2>
-        <div className="flex gap-4">
-          <button
-            onClick={prevSlide}
-            className=" p-2 rounded-full shadow-lg text-[#FF9F0D] hover:bg-[#FF9F0D] hover:text-white transition"
-          >
-            <FaArrowLeft size={24} />
-          </button>
-          <button
-            onClick={nextSlide}
-            className="bg-white p-2 rounded-full shadow-lg text-[#FF9F0D] hover:bg-[#FF9F0D] hover:text-white transition"
-          >
-            <FaArrowRight size={24} />
-          </button>
-        </div>
-      </div>
+    <div className="relative w-full flex justify-center items-center mt-16  container pb-9 z-10">
+      <div className="max-w-7xl w-full px-4 md:px-0">
+        <div className="flex justify-between items-center mb-6 px-11">
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 text-center md:text-left">
+            You Might Also Like
+          </h2>
+          <div className="flex gap-4">
+            <button
+              onClick={prevSlide}
+              className="p-2 rounded-full shadow-md text-gray-500 hover:bg-gray-100 hover:text-[#FF9F0D] transition"
+              aria-label="Previous Product"
+              disabled={currentIndex === 0}
+            >
+              <FaArrowLeft size={20} />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="p-2 rounded-full shadow-md text-gray-500 hover:bg-gray-100 hover:text-[#FF9F0D] transition"
+              aria-label="Next Product"
+              disabled={currentIndex >= products.length - productsToShow}
 
-      {/* Products Carousel */}
-      <div className="flex gap-6 overflow-x-auto py-6">
-  {products.slice(currentIndex, currentIndex + 4).map((product) => (
-    <div
-      key={product._id}
-      className="w-[250px] p-4 rounded-lg shadow-lg hover:shadow-xl transition duration-300 group relative cursor-pointer"
-    >
-      {/* Product Image */}
-      <Link href={`/shop/${product._id}`}>
-        <div className="relative">
-          <Image
-            src={product.image}
-            alt={product.name}
-            width={250}
-            height={250}
-            className="w-full h-[250px] object-cover rounded-lg group-hover:opacity-80 transition duration-300"
-          />
-          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
-            <div className="flex space-x-4">
-              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                <PiGitDiffBold size={24} />
-              </button>
-              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                <MdOutlineShoppingBag size={24} />
-              </button>
-              <button className="p-2 bg-white text-[#FF9F0D] shadow-lg hover:bg-[#FF9F0D] hover:text-white transition rounded-full">
-                <CiHeart size={24} />
-              </button>
-            </div>
+            >
+              <FaArrowRight size={20} />
+            </button>
           </div>
         </div>
-      </Link>
 
-      {/* Product Info */}
-      <h3 className="font-semibold text-lg text-gray-800 mt-4">{product.name}</h3>
-      <div className="flex items-center space-x-2 mt-2">
-        {product.originalPrice && (
-          <>
-            <p className="text-[#FF9F0D] font-bold text-xl">
-              ${product.price.toFixed(2)}
-            </p>
-            <p className="text-gray-500 line-through">
-              ${product.originalPrice.toFixed(2)}
-            </p>
-          </>
-        )}
-        {!product.originalPrice && (
-          <p className="text-[#FF9F0D] font-bold text-xl">
-            ${product.price.toFixed(2)}
-          </p>
-        )}
+        <div ref={containerRef} className="flex overflow-x-auto gap-4 scrollbar-hide snap-x snap-mandatory justify-center"> {/* Added justify-center */}
+          {products.map((product, index) => (
+            <div
+            key={product._id}
+            className={`w-64 flex-shrink-0 p-3 bg-white rounded-lg shadow-md hover:shadow-lg transition group relative cursor-pointer snap-start`}
+            style={{ scrollSnapAlign: 'start', display: index >= currentIndex && index < currentIndex + productsToShow ? 'block' : 'none' }}
+          >
+                <Link href={`/shop/${product._id}`}>
+                  <div className="relative rounded-md overflow-hidden">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      width={250}
+                      height={200}
+                      className="w-full h-[150px] md:h-[200px] object-cover transition duration-300 transform group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition"></div>
+                  </div>
+                </Link>
+                <div className="mt-3 text-left">
+                  <h3 className="font-semibold text-gray-800 truncate">
+                    {product.name}
+                  </h3>
+                  <div className="flex items-center justify-between mt-2">
+                    <div>
+                      {product.originalPrice ? (
+                        <>
+                          <span className="text-[#FF9F0D] font-bold">
+                            ${product.price.toFixed(2)}
+                          </span>
+                          <span className="text-gray-500 line-through ml-2">
+                            ${product.originalPrice.toFixed(2)}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="text-[#FF9F0D] font-bold">
+                          ${product.price.toFixed(2)}
+                        </span>
+                      )}
+                    </div>
+                    <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevents navigating to the product page
+                      addtocart(product);
+                    }}
+                      className="bg-[#FF9F0D] text-white rounded-full p-2 hover:bg-[#e08e08] transition"
+                      aria-label={`Add ${product.name} to cart`}
+                    >
+                      <MdOutlineShoppingBag size={20} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </div>
       </div>
-    </div>
-  ))}
-</div>
-
     </div>
   );
 };

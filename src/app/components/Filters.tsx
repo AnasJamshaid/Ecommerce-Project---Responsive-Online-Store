@@ -7,9 +7,36 @@ import SearchBar from './SearchBar';
 
 interface FiltersProps {
   onSearch: (searchTerm: string) => void;
+  onCategoryChange: (categories: string[]) => void;
 }
 
-export const Filters: React.FC<FiltersProps> = ({ onSearch }) => {
+export const Filters: React.FC<FiltersProps> = ({ onSearch, onCategoryChange }) => {
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const categories = [
+    "Appetizer",
+    "Burger",
+    "Chicken Chup",
+    "Drink",
+    "Pizza",
+    "Thé",
+    "Non Veg",
+    "Uncategorized",
+  ];
+
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategories((prevCategories) => {
+      if (prevCategories.includes(category)) {
+        const updatedCategories = prevCategories.filter((c) => c !== category);
+        onCategoryChange(updatedCategories); // Notify parent component
+        return updatedCategories;
+      } else {
+        const updatedCategories = [...prevCategories, category];
+        onCategoryChange(updatedCategories); // Notify parent component
+        return updatedCategories;
+      }
+    });
+  };
 
   return (
     <div className="col-span-1 p-4 border rounded-md shadow-md max-h-[1800px] bg-white flex flex-col">
@@ -22,23 +49,20 @@ export const Filters: React.FC<FiltersProps> = ({ onSearch }) => {
           Category
         </h3>
         <ul className="space-y-2">
-          {[
-            "Sandwiches",
-            "Burger",
-            "Chicken Chup",
-            "Drink",
-            "Pizza",
-            "Thé",
-            "Non Veg",
-            "Uncategorized",
-          ].map((category) => (
+          {categories.map((category) => (
             <li key={category} className="flex items-center">
-              <input type="checkbox" id={category} className="mr-2" />
+              <input
+                type="checkbox"
+                id={category}
+                className="mr-2"
+                checked={selectedCategories.includes(category)}
+                onChange={() => handleCategoryChange(category)}
+              />
               <label htmlFor={category} className="text-gray-600">
                 {category}
-              </label>
+                </label>
             </li>
-          ))}
+            ))}
         </ul>
       </div>
 
