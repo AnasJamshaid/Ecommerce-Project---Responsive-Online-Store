@@ -1,4 +1,7 @@
-import React from "react";
+// pages/ShopPage.tsx
+'use client'
+
+import React, { useState } from "react";
 import SecondHeader from "../components/SecondHeader";
 import Breadcrumb from "../components/Breadcrumb";
 import { Sorts } from "../components/Sorts";
@@ -6,9 +9,13 @@ import ProductCard from "../components/shop/products";
 import { Filters } from "../components/Filters";
 import { Footer } from "../components/Footer";
 
-
 const ShopPage: React.FC = () => {
   const pageTitle = "Our Shop";
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
 
   return (
     <div className="main-container">
@@ -28,11 +35,11 @@ const ShopPage: React.FC = () => {
         <div className="max-w-screen-xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-3">
             <Sorts />
-            <ProductCard />
+            <ProductCard searchTerm={searchTerm} /> {/* Pass the search term */}
           </div>
 
           <div className="sticky top-20 hidden md:block">
-            <Filters />
+            <Filters onSearch={handleSearch} /> {/* Pass the handleSearch function */}
           </div>
         </div>
       </div>

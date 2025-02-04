@@ -1,3 +1,4 @@
+// components/shop/products.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -17,7 +18,12 @@ type FoodItem = {
   image: string;
 };
 
-const ProductCard: React.FC = () => {
+interface ProductCardProps {
+    searchTerm: string;
+}
+
+
+const ProductCard: React.FC<ProductCardProps> = ({ searchTerm }) => {
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -68,12 +74,16 @@ const ProductCard: React.FC = () => {
     return <div>No products available.</div>;
   }
 
+  const filteredFoods = foods.filter(food =>
+    food.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="bg-white">
       <div className="max-w-screen-xl mx-auto grid grid-cols-1 gap-8">
         <div className="md:col-span-3">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-6">
-            {foods.map((food) => (
+            {filteredFoods.map((food) => (
               <div
                 className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition duration-300 group relative cursor-pointer"
                 key={food._id}
@@ -141,6 +151,9 @@ const ProductCard: React.FC = () => {
                 </div>
               </div>
             ))}
+              {filteredFoods.length === 0 && searchTerm !== "" && (
+                      <div>No matching products found.</div>
+                  )}
           </div>
         </div>
       </div>

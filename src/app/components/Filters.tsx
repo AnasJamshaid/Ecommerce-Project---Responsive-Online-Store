@@ -1,24 +1,20 @@
-import React from 'react'
-import { BsArrowRight } from 'react-icons/bs'
-import { FaSearch, FaStar } from 'react-icons/fa'
-import Image from 'next/image'  // Import Image from next/image
+// components/Filters.tsx
+import React, { useState } from 'react';
+import { BsArrowRight } from 'react-icons/bs';
+import { FaStar } from 'react-icons/fa';
+import Image from 'next/image';
+import SearchBar from './SearchBar';
 
-export const Filters = () => {
+interface FiltersProps {
+  onSearch: (searchTerm: string) => void;
+}
+
+export const Filters: React.FC<FiltersProps> = ({ onSearch }) => {
+
   return (
     <div className="col-span-1 p-4 border rounded-md shadow-md max-h-[1800px] bg-white flex flex-col">
       {/* Search Bar */}
-      <div className="mb-6">
-        <div className="flex items-center border rounded-md shadow-sm bg-[#FFF7ED]">
-          <input
-            type="text"
-            placeholder="Search Product"
-            className="w-full px-3 py-2 bg-transparent text-black focus:outline-none"
-          />
-          <button className="px-4 bg-[#FF9F0D] text-white rounded-r-md flex items-center justify-center">
-            <FaSearch className="h-12 w-5" />
-          </button>
-        </div>
-      </div>
+      <SearchBar onSearch={onSearch} />
 
       {/* Categories */}
       <div className="mb-6">
@@ -162,5 +158,5 @@ export const Filters = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
